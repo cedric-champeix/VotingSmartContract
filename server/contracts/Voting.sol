@@ -23,6 +23,27 @@ contract Voting is Ownable{
         string description;
         uint voteCount;
     }
+    Proposal[] public proposals;
+
+    WorkflowStatus public workflowStatus;
+
+    uint public winningProposalId;
+    address public administator;
+    mapping(address => Voter) public voters;
+
+    event VoterRegistered(address voterAddress);
+    event WorkflowStatusChange(WorkflowStatus previousStatus, WorkflowStatus newStatus);
+    event ProposalRegistered(uint proposalId);
+    event Voted (address voter, uint proposalId);
+
+    modifier onlyOwner {
+        require(msg.sender == owner);
+        _;
+    }
+    modifier onlyRegisteredVoter {
+        require(voters[msg.sender].isRegistered, "Voter is not registered");
+        _;
+    }
 
     function registerVoter(address _address) external onlyOwner {
         require(workflowStatus == WorkflowStatus.VotersRegisteration, "Voters registration is not allowed at this time");
@@ -31,9 +52,13 @@ contract Voting is Ownable{
         emit VoterRegistered(_address);
     }
 
-    event VoterRegistered(address voterAddress);
-    event WorkflowStatusChange(WorkflowStatus previousStatus, WorkflowStatus newStatus);
-    event ProposalRegistered(uint proposalId);
-    event Voted (address voter, uint proposalId);
+    function vote(uint proposal) public onlyRegisteredVoter{
+        Voter storage sender = voters[msg.sender];
+        require(!sender.hasVoted, "Voter already voted");
+        require(workflowStatus == WorkflowStatus.VotingSessionStart, "Voting session is not allowed at this time");
+
+    }
+
+
 
 }
