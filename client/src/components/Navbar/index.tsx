@@ -10,7 +10,16 @@ import { Button } from '../ui/button';
 import { useLogout } from '@/hooks/useLogout';
 import { useWeb3 } from '@/hooks/useWeb3';
 import { Avatar, AvatarFallback } from '../ui/avatar';
-import { DropdownMenuItem, DropdownMenu, DropdownMenuTrigger, DropdownMenuContent } from '../ui/dropdown-menu';
+import {
+  DropdownMenuItem,
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuGroup,
+  DropdownMenuSeparator,
+  DropdownMenuShortcut,
+} from '../ui/dropdown-menu';
 
 export const Navbar = () => {
   const { t } = useTranslation();
@@ -44,29 +53,24 @@ export const Navbar = () => {
             </Link>
           </div>
           <div className='flex gap-4 items-center'>
-            {/* <div className='flex gap-2'>
-              <Button onClick={() => logout()} variant='link'>
-                <span>Logout</span>
-                <LogOut />
-              </Button>
-            </div> */}
-
             <DropdownMenu>
               <DropdownMenuTrigger>
                 <Avatar>
                   <AvatarFallback>{account.slice(0, 3)}</AvatarFallback>
                 </Avatar>
               </DropdownMenuTrigger>
-              <DropdownMenuContent>
-                <DropdownMenuItem className='flex items-center gap-4 h-8 w-full'>
-                  <Button onClick={() => logout()} variant='link'>
-                    <span>Logout</span>
-                    <LogOut />
-                  </Button>
-                </DropdownMenuItem>
+              <DropdownMenuContent className='w-40'>
+                <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuGroup>
+                  <DropdownMenuItem className='flex gap-4 items-center justify-start' onClick={() => logout()}>
+                    Log out
+                    <LogOut className='w-4 h-4' />
+                    <DropdownMenuShortcut></DropdownMenuShortcut>
+                  </DropdownMenuItem>
+                </DropdownMenuGroup>
               </DropdownMenuContent>
             </DropdownMenu>
-
             <Separator orientation='vertical' className='h-6' />
             <div className='flex gap-4 items-center justify-between'>
               <LanguageChanger />
