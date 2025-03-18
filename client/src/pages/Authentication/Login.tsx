@@ -34,7 +34,7 @@ export const Login = () => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.6, duration: 0.4 }}
         onClick={connectWallet}
-        className='px-8 py-4 bg-white text-purple-600 font-bold rounded-3xl shadow-xl hover:bg-purple-100 transition-all duration-300'
+        className='px-8 py-4 bg-white text-purple-600 font-bold rounded-3xl shadow-xl hover:bg-purple-100'
       >
         Connect with MetaMask
       </motion.button>
