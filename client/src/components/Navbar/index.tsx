@@ -53,7 +53,7 @@ export const Navbar = () => {
         <div className='hidden md:flex items-center justify-between p-4 text-primary px-8 select-none'>
           <div className='font-extrabold text-3xl'>
             <Link to='/' onClick={() => scrollToSection('home-section')}>
-              Crypto TGC
+              Crypto TCG
             </Link>
           </div>
           <div className='flex gap-4 items-center'>
@@ -85,7 +85,7 @@ export const Navbar = () => {
         {/* Mobile Navbar with Hamburger Menu */}
         <div className='flex md:hidden justify-between items-center p-4'>
           <div className='font-extrabold text-3xl'>
-            <Link to='/'>Crypto TGC</Link>
+            <Link to='/'>Crypto TCG</Link>
           </div>
           <Menu onClick={() => setIsOpen(!isOpen)} className='cursor-pointer' />
         </div>
