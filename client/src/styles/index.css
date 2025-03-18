@@ -31,40 +31,26 @@
     --radius: 0.5rem;
   }
   .dark {
-    --background: 230 15% 10%;
-    --foreground: 220 15% 90%;
-
-    --card: 230 12% 12%;
-    --card-foreground: 220 20% 95%;
-
-    --popover: 230 12% 12%;
-    --popover-foreground: 220 20% 95%;
-
-    --primary: 220 100% 65%; /* un beau bleu électrique pour le principal */
+    --background: 210 15% 10%; /* Gris charbon très foncé */
+    --foreground: 0 0% 95%; /* Texte clair pour contraster avec le fond */
+    --card: 210 12% 12%; /* Gris plus foncé pour les cartes */
+    --card-foreground: 0 0% 90%;
+    --primary: 190 50% 55%; /* Bleu-vert lumineux, inspiré de VSCode */
     --primary-foreground: 0 0% 100%;
-
-    --secondary: 240 10% 20%;
-    --secondary-foreground: 220 20% 90%;
-
-    --muted: 240 8% 16%;
-    --muted-foreground: 220 10% 60%;
-
-    --accent: 280 80% 65%; /* un violet vibrant pour les accents */
+    --secondary: 190 40% 45%; /* Gris-bleu pour les éléments secondaires */
+    --secondary-foreground: 0 0% 100%;
+    --accent: 190 50% 60%; /* Accent bleu-vert lumineux */
     --accent-foreground: 0 0% 100%;
-
-    --destructive: 0 80% 50%; /* rouge puissant et éclatant */
+    --destructive: 0 70% 45%; /* Rouge orangé pour avertissements */
     --destructive-foreground: 0 0% 100%;
-
-    --border: 220 10% 20%;
-    --input: 220 10% 25%;
-    --ring: 220 100% 65%; /* la même couleur que primary pour les focus rings */
-
-    /* Couleurs de graphiques dynamiques */
-    --chart-1: 200 85% 60%; /* cyan */
-    --chart-2: 145 70% 50%; /* vert vif */
-    --chart-3: 40 85% 55%; /* orange doré */
-    --chart-4: 290 80% 65%; /* violet rose */
-    --chart-5: 0 90% 60%; /* rouge rosé */
+    --border: 210 8% 25%; /* Bordure subtile mais présente */
+    --input: 210 8% 30%; /* Gris foncé pour les champs de saisie */
+    --ring: 190 50% 60%; /* Bleu-vert lumineux pour les focus */
+    --chart-1: 190 50% 60%;
+    --chart-2: 50 70% 60%; /* Jaune chaud pour la différence */
+    --chart-3: 320 50% 60%; /* Violet pour un peu de contraste */
+    --chart-4: 100 60% 60%; /* Vert pour un accent frais */
+    --chart-5: 280 50% 55%; /* Rose pour donner du pep */
   }
 }
 
