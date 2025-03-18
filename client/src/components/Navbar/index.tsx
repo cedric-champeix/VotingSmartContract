@@ -56,7 +56,7 @@ export const Navbar = () => {
             <DropdownMenu>
               <DropdownMenuTrigger>
                 <Avatar>
-                  <AvatarFallback>{account.slice(0, 3)}</AvatarFallback>
+                  <AvatarFallback className='bg-gray-200 dark:bg-gray-800'>{account.slice(0, 3)}</AvatarFallback>
                 </Avatar>
               </DropdownMenuTrigger>
               <DropdownMenuContent className='w-40'>

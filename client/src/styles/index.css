@@ -31,27 +31,27 @@
     --radius: 0.5rem;
   }
   .dark {
-    --background: 210 15% 10%; /* Gris charbon très foncé */
-    --foreground: 0 0% 95%; /* Texte clair pour contraster avec le fond */
-    --card: 210 12% 12%; /* Gris plus foncé pour les cartes */
-    --card-foreground: 0 0% 90%;
-    --primary: 190 50% 55%; /* Bleu-vert lumineux, inspiré de VSCode */
+    --background: 220 20% 12%;
+    --foreground: 0 0% 93%;
+    --card: 220 15% 15%;
+    --card-foreground: 0 0% 88%;
+    --primary: 210 60% 55%;
     --primary-foreground: 0 0% 100%;
-    --secondary: 190 40% 45%; /* Gris-bleu pour les éléments secondaires */
-    --secondary-foreground: 0 0% 100%;
-    --accent: 190 50% 60%; /* Accent bleu-vert lumineux */
+    --secondary: 210 45% 45%;
+    --secondary-foreground: 0 0% 97%;
+    --accent: 210 65% 60%;
     --accent-foreground: 0 0% 100%;
-    --destructive: 0 70% 45%; /* Rouge orangé pour avertissements */
-    --destructive-foreground: 0 0% 100%;
-    --border: 210 8% 25%; /* Bordure subtile mais présente */
-    --input: 210 8% 30%; /* Gris foncé pour les champs de saisie */
-    --ring: 190 50% 60%; /* Bleu-vert lumineux pour les focus */
-    --chart-1: 190 50% 60%;
-    --chart-2: 50 70% 60%; /* Jaune chaud pour la différence */
-    --chart-3: 320 50% 60%; /* Violet pour un peu de contraste */
-    --chart-4: 100 60% 60%; /* Vert pour un accent frais */
-    --chart-5: 280 50% 55%; /* Rose pour donner du pep */
+    --destructive: 0 70% 45%;
+    --border: 220 12% 25%;
+    --input: 220 12% 30%;
+    --ring: 210 65% 65%;
+    --chart-1: 210 65% 60%;
+    --chart-2: 50 65% 55%;
+    --chart-3: 320 50% 60%;
+    --chart-4: 100 60% 60%;
+    --chart-5: 280 50% 55%;
   }
+
 }
 
 @layer base {
