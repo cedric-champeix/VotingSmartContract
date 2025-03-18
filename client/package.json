@@ -1,5 +1,5 @@
 {
-  "name": "crypto_TCG",
+  "name": "crypto_tcg",
   "private": true,
   "version": "1.0",
   "type": "module",
