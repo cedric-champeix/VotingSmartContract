@@ -3,16 +3,23 @@ import { ThemeChanger } from './ThemeChanger';
 import { LanguageChanger } from './LanguageChanger';
 import { useTranslation } from 'react-i18next';
 import { Separator } from '../ui/separator';
-import { Briefcase, FileText, House, Info, Mail, Menu, X } from 'lucide-react';
+import { Briefcase, FileText, House, Info, LogOut, Mail, Menu, X } from 'lucide-react';
 import { useState, useEffect, useRef } from 'react';
 import { cn } from '@/lib/utils';
 import { Button } from '../ui/button';
+import { useLogout } from '@/hooks/useLogout';
+import { useWeb3 } from '@/hooks/useWeb3';
+import { Avatar, AvatarFallback } from '../ui/avatar';
+import { DropdownMenuItem, DropdownMenu, DropdownMenuTrigger, DropdownMenuContent } from '../ui/dropdown-menu';
 
 export const Navbar = () => {
   const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
   const menuRef = useRef(null);
   const navigate = useNavigate();
+
+  const { logout, loading } = useLogout();
+  const { account } = useWeb3();
 
   // Handle clicks outside of the menu
   useEffect(() => {
@@ -38,11 +45,29 @@ export const Navbar = () => {
           </div>
           <div className='flex gap-4 items-center'>
             {/* <div className='flex gap-2'>
-              <Button onClick={() => navigate('/')} variant='link'>
-                {t('navbar.home')}
+              <Button onClick={() => logout()} variant='link'>
+                <span>Logout</span>
+                <LogOut />
               </Button>
-            </div>
-            <Separator orientation='vertical' className='h-6' /> */}
+            </div> */}
+
+            <DropdownMenu>
+              <DropdownMenuTrigger>
+                <Avatar>
+                  <AvatarFallback>{account.slice(0, 3)}</AvatarFallback>
+                </Avatar>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                <DropdownMenuItem className='flex items-center gap-4 h-8 w-full'>
+                  <Button onClick={() => logout()} variant='link'>
+                    <span>Logout</span>
+                    <LogOut />
+                  </Button>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+
+            <Separator orientation='vertical' className='h-6' />
             <div className='flex gap-4 items-center justify-between'>
               <LanguageChanger />
               <ThemeChanger />
@@ -71,11 +96,28 @@ export const Navbar = () => {
           </div>
 
           <div className='flex flex-col gap-4 p-8 pt-2'>
-            {/* <Button onClick={() => navigate('/')} variant='link' className='flex gap-4 items-center justify-start'>
+            <Button
+              onClick={() => {
+                navigate('/');
+                setIsOpen(false);
+              }}
+              variant='link'
+              className='flex gap-4 items-center justify-start'
+            >
               <House className='w-4 h-4' />
               {t('navbar.home')}
             </Button>
-            <Separator /> */}
+            <Button
+              onClick={() => {
+                logout();
+              }}
+              variant='link'
+              className='flex gap-4 items-center justify-start'
+            >
+              <LogOut className='w-4 h-4' />
+              Logout
+            </Button>
+            <Separator />
             <div className='flex gap-4 justify-center items-center '>
               <LanguageChanger />
               <ThemeChanger />
