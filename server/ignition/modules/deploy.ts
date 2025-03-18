@@ -1,8 +1,8 @@
 import { buildModule } from "@nomicfoundation/hardhat-ignition/modules";
 
-const storageModule = buildModule("StorageModule", (m) => {
+const storageModule = buildModule("VotingModule", (m) => {
 
-    const storage = m.contract("Storage");
+    const storage = m.contract("Voting");
 
     return { storage };
 });
