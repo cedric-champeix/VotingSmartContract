@@ -1,11 +1,17 @@
 {
   "name": "hardhat-project",
+  "scripts": {
+    "test": "vitest"
+  },
   "devDependencies": {
     "@nomicfoundation/hardhat-toolbox": "^5.0.0",
-    "hardhat": "^2.22.19"
+    "hardhat": "^2.22.19",
+    "vitest": "^3.0.9"
   },
   "dependencies": {
     "@openzeppelin/contracts": "^4.9.6",
+    "@openzeppelin/test-helpers": "^0.5.16",
+    "chai": "^5.2.0",
     "dotenv": "^16.4.7"
   }
 }
