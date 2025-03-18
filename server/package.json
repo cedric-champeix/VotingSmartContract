@@ -1,9 +1,11 @@
 {
   "name": "hardhat-project",
+  "scripts": {
+    "compile": "hardhat compile",
+    "test": "hardhat test"
+  },
   "devDependencies": {
     "@nomicfoundation/hardhat-toolbox": "^5.0.0",
-    "hardhat": "^2.22.19",
-    "prettier": "^3.5.3",
-    "prettier-plugin-solidity": "^1.4.2"
+    "hardhat": "^2.22.19"
   }
 }
