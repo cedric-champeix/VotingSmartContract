@@ -19,6 +19,8 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "country-flag-icons": "^1.5.13",
+    "ethers": "^6.13.5",
+    "framer-motion": "^12.5.0",
     "i18next": "^23.16.4",
     "lucide-react": "^0.454.0",
     "prettier": "^3.3.3",
