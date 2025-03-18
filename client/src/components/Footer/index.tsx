@@ -27,7 +27,7 @@ export const Footer = () => {
           </Link>
         </div>
         <div>
-          <p>Copyright © {new Date().getFullYear()} l'équipe Crypto CGT | Tout droit reservés.</p>
+          <p>Copyright © {new Date().getFullYear()} l'équipe Crypto TGC | Tout droit reservés.</p>
         </div>
       </div>
 
@@ -60,7 +60,7 @@ export const Footer = () => {
         </div>
         <Separator />
         <div className='flex justify-between p-4 px-16 '>
-          <p>© {new Date().getFullYear()} L'équipe Crypto CGT | Tout droit reservés</p>
+          <p>© {new Date().getFullYear()} L'équipe Crypto TGC | Tout droit reservés</p>
           <ArrowUpIcon className='h-6 w-6 cursor-pointer' onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} />
         </div>
       </div>
