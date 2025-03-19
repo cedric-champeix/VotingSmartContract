@@ -19,6 +19,12 @@ thumb
 sketch
 
 ### Solidity ###
+
+server/coverage.json
+cache
+artifacts
+
+
 # Logs
 npm-debug.log*
 yarn-debug.log*
