@@ -23,6 +23,7 @@ sketch
 artifacts/
 ignition/deployments/
 cache/
+typechain-types/
 
 # Logs
 npm-debug.log*
