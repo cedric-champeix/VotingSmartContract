@@ -1,7 +1,33 @@
 {
   "files": [],
   "references": [
-    { "path": "./tsconfig.app.json" },
-    { "path": "./tsconfig.node.json" }
-  ]
+    {
+      "path": "./tsconfig.app.json"
+    },
+    {
+      "path": "./tsconfig.node.json"
+    }
+  ],
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+    },
+    "target": "es5", // Définit la version JavaScript de sortie
+    "lib": ["dom", "dom.iterable", "esnext"], // Bibliothèques utilisées
+    "allowJs": true, // Permet de compiler des fichiers JavaScript
+    "skipLibCheck": true, // Ignore la vérification des types dans les fichiers de bibliothèque
+    "esModuleInterop": true, // Meilleure compatibilité avec CommonJS et ES Modules
+    "allowSyntheticDefaultImports": true, // Permet d'importer des modules par défaut même sans export par défaut
+    "strict": true, // Active les vérifications strictes de TypeScript
+    "forceConsistentCasingInFileNames": true, // Évite les erreurs de casse de fichiers importés
+    "module": "esnext", // Utilise le module ESNext pour la gestion des imports
+    "moduleResolution": "node", // Utilise la résolution de modules comme dans Node.js
+    "resolveJsonModule": true, // Permet l'importation de fichiers JSON
+    "isolatedModules": true, // Vérifie chaque fichier comme un module séparé
+    "noEmit": true, // Empêche la génération de fichiers de sortie (utile dans React)
+    "jsx": "react-jsx" // Utilise la transformation JSX pour React 17+
+  },
+  "include": ["src"], // Dossier source des fichiers TypeScript
+  "exclude": ["node_modules"] // Exclut les fichiers de node_modules
 }

@@ -1,5 +1,15 @@
-import { render } from 'preact';
-import './index.css';
-import { App } from './app.tsx';
+import { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
+import "./styles/index.css";
+import { RouterProvider } from "react-router-dom";
+import { router } from "./routes/router";
+import { ThemeProvider } from "./providers/theme-provider";
+import "./lib/i18n";
 
-render(<App />, document.getElementById('app')!);
+createRoot(document.getElementById("root")!).render(
+  <StrictMode>
+    <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
+      <RouterProvider router={router} />
+    </ThemeProvider>
+  </StrictMode>,
+);
