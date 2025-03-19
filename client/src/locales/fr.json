@@ -1,9 +1,69 @@
 {
+  "table": {
+    "votes": {
+      "title": "Liste des votes",
+      "searchProposal": "Rechercher une proposition",
+      "collumn": {
+        "desc": "Description",
+        "voteCount": "Nombre de votes"
+      },
+      "content": {
+        "noVoteFound": "Aucun vote trouvé."
+      },
+      "footer": {
+        "pageNb": "sur",
+        "totalPage": "entrées au total",
+        "button": {
+          "first": "Première",
+          "previous": "Précédente",
+          "next": "Suivante",
+          "last": "Dernière"
+        },
+        "select": {
+          "displayAll": "Tout Afficher",
+          "perPage": "par page"
+        }
+      }
+    }
+  },
   "navbar": {
     "home": "Accueil",
     "about": "À propos",
     "projects": "Projets",
     "services": "Services",
-    "contact": "Contact"
+    "contact": "Contact",
+    "logout": "Déconnexion",
+    "myAccount": "Mon compte",
+    "vote": "Vote"
+  },
+  "footer": {
+    "copyright": {
+      "teamName": "L'équipe Crypto TCG",
+      "rightsSentence": "Tout droit reservés"
+    },
+    "socials": "Réseaux sociaux"
+  },
+  "about": {
+    "title": "Notre équipe",
+    "teo": {
+      "name": "Téo Villet",
+      "role": "Troubadour",
+      "bio": "Téo est un étudiant en informatique à l'Université de Technologie de Compiègne. Il est passionné par la programmation et les nouvelles technologies. Il a travaillé sur le back-end de ce projet."
+    },
+    "cedric": {
+      "name": "Cédric Champeix",
+      "role": "Troubadour",
+      "bio": "Cédric est un étudiant en informatique à l'Université de Technologie de Compiègne. Il est passionné par la programmation et les nouvelles technologies. Il a travaillé sur le front-end de ce projet."
+    },
+    "gabin": {
+      "name": "Gabin Demé",
+      "role": "Troubadour",
+      "bio": "Gabin est un étudiant en informatique à l'Université de Technologie de Compiègne. Il est passionné par la programmation et les nouvelles technologies. Il a travaillé sur le front-end de ce projet."
+    }
+  },
+  "login": {
+    "title": "Bienvenue ! ",
+    "subtitle": "Accédez à votre tableau de bord et interagissez avec la blockchain en toute sécurité.",
+    "button": "Se connecter avec Metamask"
   }
 }

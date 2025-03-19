@@ -10,6 +10,7 @@ logs
 
 node_modules
 bower_components
+.idea
 
 *.sublime*
 
@@ -18,6 +19,13 @@ thumb
 sketch
 
 ### Solidity ###
+
+server/coverage.json
+artifacts/
+ignition/deployments/
+cache/
+typechain-types/
+
 # Logs
 npm-debug.log*
 yarn-debug.log*
@@ -41,7 +49,7 @@ lib-cov
 coverage
 *.lcov
 
-# nyc test coverage
+# nyc tests coverage
 .nyc_output
 
 # Grunt intermediate storage (https://gruntjs.com/creating-plugins#storing-task-files)
