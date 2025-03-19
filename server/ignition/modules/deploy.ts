@@ -1,10 +1,22 @@
-import { buildModule } from "@nomicfoundation/hardhat-ignition/modules";
+import { ethers } from "hardhat";
 
-const storageModule = buildModule("MyVotingModule", (m) => {
+async function main() {
+  const [deployer] = await ethers.getSigners();
+  console.log("Déploiement du contrat avec le compte:", deployer.address);
 
-    const storage = m.contract("Voting");
+  const Voting = await ethers.getContractFactory("Voting");
 
-    return { storage };
-});
+  const votingContract = await Voting.deploy();
 
-export default storageModule;
+  return await votingContract.getAddress();
+}
+
+// Exécuter le script
+main()
+  .then((contractAddress) => {
+    console.log("Adresse du contrat déployé:", contractAddress);
+  })
+  .catch((error) => {
+    console.error("Erreur lors du déploiement:", error);
+    process.exitCode = 1;
+  });
