@@ -8,9 +8,14 @@
     "coverage": "npx hardhat coverage"
   },
   "devDependencies": {
-    "@nomicfoundation/hardhat-toolbox": "^3.0.0",
+    "@nomicfoundation/hardhat-ignition": "^0.15.10",
+    "@openzeppelin/contracts": "^4.9.6",
     "dotenv": "^16.0.0",
-    "typescript": "^4.9.4",
-    "@openzeppelin/contracts": "^4.9.6"
+    "hardhat": "^2.22.19",
+    "typescript": "^4.9.4"
+  },
+  "dependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^5.0.0",
+    "@types/node": "^22.13.10"
   }
 }
