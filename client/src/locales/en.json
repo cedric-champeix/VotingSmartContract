@@ -36,6 +36,11 @@
     "myAccount": "My account",
     "vote": "Vote"
   },
+  "login": {
+    "title": "Welcome ! ",
+    "subtitle": "Access your dashboard and interact with the blockchain securely.",
+    "button": "Connect with Metamask"
+  },
   "footer": {
     "copyright": {
       "teamName": "Crypto TCG Team",
