@@ -5,8 +5,7 @@ import { Footer } from '@/components/Footer';
 import { Login } from '@/pages/Authentication/Login';
 import { Home } from '@/pages/Home';
 import { ProtectedRoute } from './protectedRoute';
-import {About} from "@/pages/About";
-import {Vote} from "lucide-react";
+import { About } from '@/pages/About';
 
 const RootLayout = () => {
   return (
@@ -34,8 +33,8 @@ export const router = createBrowserRouter([
       },
       {
         path: '/about',
-        element: <About/>,
-      }
+        element: <About />,
+      },
     ],
   },
   {

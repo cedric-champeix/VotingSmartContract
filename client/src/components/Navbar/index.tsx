@@ -3,7 +3,7 @@ import { ThemeChanger } from './ThemeChanger';
 import { LanguageChanger } from './LanguageChanger';
 import { useTranslation } from 'react-i18next';
 import { Separator } from '../ui/separator';
-import {Briefcase, FileText, House, Info, LogOut, Mail, Menu, PersonStanding, StickyNote, Users, X} from 'lucide-react';
+import { Briefcase, FileText, House, Info, LogOut, Mail, Menu, PersonStanding, StickyNote, Users, X } from 'lucide-react';
 import { useState, useEffect, useRef } from 'react';
 import { cn } from '@/lib/utils';
 import { Button } from '../ui/button';
@@ -54,12 +54,6 @@ export const Navbar = () => {
           </div>
           <div className='flex gap-4 items-center'>
             <div className='flex gap-12 items-center'>
-              <Link to='/page1' onClick={() => navigate('/page1')}>
-                page1
-              </Link>
-              <Link to='/vote' onClick={() => navigate('/vote')}>
-                Vote
-              </Link>
               <Link to='/about' onClick={() => navigate('/about')}>
                 {t('navbar.about')}
               </Link>
@@ -122,28 +116,7 @@ export const Navbar = () => {
               <House className='w-4 h-4' />
               {t('navbar.home')}
             </Button>
-            <Button
-              onClick={() => {
-                navigate('/page1');
-                setIsOpen(false);
-              }}
-              variant='link'
-              className='flex gap-4 items-center justify-start'
-            >
-              <StickyNote className='w-4 h-4' />
-              {t('navbar.page1')}
-            </Button>
-            <Button
-              onClick={() => {
-                navigate('/vote');
-                setIsOpen(false);
-              }}
-              variant='link'
-              className='flex gap-4 items-center justify-start'
-            >
-              <Mail className='w-4 h-4' />
-              {t('navbar.vote')}
-            </Button>
+
             <Button
               onClick={() => {
                 navigate('/about');
