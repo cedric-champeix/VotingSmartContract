@@ -228,6 +228,13 @@ contract Voting is Ownable {
         require(!sender.hasVoted, "You have already voted");
         require(workflowStatus == WorkflowStatus.VotingSessionStart, "Voting session not started");
         require(proposalId < proposals.length, "Invalid proposal");
+  /**
+   * @dev Allows a registered voter to vote for a proposal.
+   * @param proposalId The ID of the proposal to vote for.
+   */
+  function vote(uint proposalId) external ensureValidVoter {
+    require(workflowStatus == WorkflowStatus.VotingSessionStart, "Voting session not started");
+    require(proposalId < proposals.length, "Invalid proposal");
 
     Voter storage voter = voters[msg.sender];
     require(!voter.hasVoted, "You have already voted");
