@@ -1,49 +1,26 @@
 import { ArrowUpIcon, FacebookIcon, GithubIcon, InstagramIcon, Linkedin, LinkedinIcon, TwitterIcon, YoutubeIcon } from 'lucide-react';
 import { Separator } from '../ui/separator';
 import { Link } from 'react-router-dom';
+import {useTranslation} from "react-i18next";
 
-export const Footer = () => {
-  return (
+export const Footer = () =>{
+const { t } = useTranslation();
+return (
     <div>
       {/* Section pour mobile */}
-      <div className='sm:hidden flex p-4 flex-col gap-8 fixed bottom-0 left-0 right-0 bg-background text-primary border-t-2 border-primary'>
+      <div className='sm:hidden flex p-4 flex-col gap-8  bg-background text-primary border-t-2 border-primary'>
         <div>
           <p>
-            Copyright © {new Date().getFullYear()} l'équipe Crypto TCG <br /> Tout droit reservés.
+            Copyright © {new Date().getFullYear()} {t('footer.copyright.teamName')} <br /> {t('footer.copyright.rightsSentence')}
           </p>
         </div>
       </div>
 
       {/* Section pour écrans plus grands */}
       <div className='hidden sm:block fixed bottom-0 left-0 right-0 bg-background text-primary'>
-        <div className='flex items-start justify-between p-8 px-16'>
-          <div>
-            <h2 className='font-bold pb-4'>Réseaux sociaux</h2>
-            <ul className='flex flex-col gap-2 pl-4'>
-              <div className='flex gap-2 items-center'>
-                <GithubIcon className='h-4 w-4' />
-                <Link target='_blank' className='hover:underline' to='https://github.com/teovlt'>
-                  Github Téo
-                </Link>
-              </div>{' '}
-              <div className='flex gap-2 items-center'>
-                <GithubIcon className='h-4 w-4' />
-                <Link target='_blank' className='hover:underline' to='https://github.com/Onibagg/Onibagg'>
-                  Github Gabin
-                </Link>
-              </div>{' '}
-              <div className='flex gap-2 items-center'>
-                <GithubIcon className='h-4 w-4' />
-                <Link target='_blank' className='hover:underline' to='https://github.com/cedric-champeix'>
-                  Github Cédric
-                </Link>
-              </div>
-            </ul>
-          </div>
-        </div>
         <Separator />
         <div className='flex justify-between p-4 px-16 '>
-          <p>© {new Date().getFullYear()} L'équipe Crypto TCG | Tout droit reservés</p>
+          <p>© {new Date().getFullYear()} {t('footer.copyright.teamName')} | {t('footer.copyright.rightsSentence')}</p>
           <ArrowUpIcon className='h-6 w-6 cursor-pointer' onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} />
         </div>
       </div>

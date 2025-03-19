@@ -1,9 +1,64 @@
 {
+  "table": {
+    "votes": {
+      "title": "Votes list",
+      "searchProposal": "Search proposal",
+      "collumn": {
+        "desc": "Description",
+        "voteCount": "Number of votes"
+      },
+      "content": {
+        "noVoteFound": "No vote found."
+      },
+      "footer": {
+        "pageNb": "of",
+        "totalPage": "total entries",
+        "button": {
+          "first": "First",
+          "previous": "Previous",
+          "next": "Next",
+          "last": "Last"
+        },
+        "select": {
+          "displayAll": "Display all",
+          "perPage": "per page"
+        }
+      }
+    }
+  },
   "navbar": {
     "home": "Home",
     "about": "About",
     "projects": "Projects",
     "services": "Services",
-    "contact": "Contact"
+    "contact": "Contact",
+    "logout": "Logout",
+    "myAccount": "My account",
+    "vote": "Vote"
+  },
+  "footer": {
+    "copyright": {
+      "teamName": "Crypto TCG Team",
+      "rightsSentence": "All rights reserved"
+    },
+    "socials": "Socials"
+  },
+  "about": {
+    "title": "Our team",
+    "teo": {
+    "name": "Téo Villet",
+    "role": "Troubadour",
+    "bio": "Téo is a computer science student at the University of Technology of Compiègne. He is passionate about programming and new technologies. He worked on the back-end of this project."
+  },
+  "cedric": {
+    "name": "Cédric Champeix",
+    "role": "Troubadour",
+    "bio": "Cédric is a computer science student at the University of Technology of Compiègne. He is passionate about programming and new technologies. He worked on the front-end of this project."
+  },
+  "gabin": {
+    "name": "Gabin Demé",
+    "role": "Troubadour",
+    "bio": "Gabin is a computer science student at the University of Technology of Compiègne. He is passionate about programming and new technologies. He worked on the front-end of this project."
   }
+}
 }

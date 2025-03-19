@@ -3,7 +3,7 @@ import { ThemeChanger } from './ThemeChanger';
 import { LanguageChanger } from './LanguageChanger';
 import { useTranslation } from 'react-i18next';
 import { Separator } from '../ui/separator';
-import { Briefcase, FileText, House, Info, LogOut, Mail, Menu, X } from 'lucide-react';
+import {Briefcase, FileText, House, Info, LogOut, Mail, Menu, PersonStanding, StickyNote, Users, X} from 'lucide-react';
 import { useState, useEffect, useRef } from 'react';
 import { cn } from '@/lib/utils';
 import { Button } from '../ui/button';
@@ -53,24 +53,35 @@ export const Navbar = () => {
             </Link>
           </div>
           <div className='flex gap-4 items-center'>
-            <DropdownMenu>
-              <DropdownMenuTrigger>
-                <Avatar>
-                  <AvatarFallback className='bg-gray-200 dark:bg-gray-800'>{account.slice(0, 3)}</AvatarFallback>
-                </Avatar>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent className='w-40'>
-                <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuGroup>
-                  <DropdownMenuItem className='flex gap-4 items-center justify-start' onClick={() => logout()}>
-                    Log out
-                    <LogOut className='w-4 h-4' />
-                    <DropdownMenuShortcut></DropdownMenuShortcut>
-                  </DropdownMenuItem>
-                </DropdownMenuGroup>
-              </DropdownMenuContent>
-            </DropdownMenu>
+            <div className='flex gap-12 items-center'>
+              <Link to='/page1' onClick={() => navigate('/page1')}>
+                page1
+              </Link>
+              <Link to='/vote' onClick={() => navigate('/vote')}>
+                Vote
+              </Link>
+              <Link to='/about' onClick={() => navigate('/about')}>
+                {t('navbar.about')}
+              </Link>
+              <DropdownMenu>
+                <DropdownMenuTrigger>
+                  <Avatar>
+                    <AvatarFallback className='bg-gray-200 dark:bg-gray-800'>{account.slice(0, 3)}</AvatarFallback>
+                  </Avatar>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className='w-40'>
+                  <DropdownMenuLabel>{t('navbar.myAccount')}</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuGroup>
+                    <DropdownMenuItem className='flex gap-4 items-center justify-start' onClick={() => logout()}>
+                      {t('navbar.logout')}
+                      <LogOut className='w-4 h-4' />
+                      <DropdownMenuShortcut></DropdownMenuShortcut>
+                    </DropdownMenuItem>
+                  </DropdownMenuGroup>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
             <Separator orientation='vertical' className='h-6' />
             <div className='flex gap-4 items-center justify-between'>
               <LanguageChanger />
@@ -113,13 +124,46 @@ export const Navbar = () => {
             </Button>
             <Button
               onClick={() => {
+                navigate('/page1');
+                setIsOpen(false);
+              }}
+              variant='link'
+              className='flex gap-4 items-center justify-start'
+            >
+              <StickyNote className='w-4 h-4' />
+              {t('navbar.page1')}
+            </Button>
+            <Button
+              onClick={() => {
+                navigate('/vote');
+                setIsOpen(false);
+              }}
+              variant='link'
+              className='flex gap-4 items-center justify-start'
+            >
+              <Mail className='w-4 h-4' />
+              {t('navbar.vote')}
+            </Button>
+            <Button
+              onClick={() => {
+                navigate('/about');
+                setIsOpen(false);
+              }}
+              variant='link'
+              className='flex gap-4 items-center justify-start'
+            >
+              <Users className='w-4 h-4' />
+              {t('navbar.about')}
+            </Button>
+            <Button
+              onClick={() => {
                 logout();
               }}
               variant='link'
               className='flex gap-4 items-center justify-start'
             >
               <LogOut className='w-4 h-4' />
-              Logout
+              {t('navbar.logout')}
             </Button>
             <Separator />
             <div className='flex gap-4 justify-center items-center '>
