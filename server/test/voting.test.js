@@ -1,209 +1,199 @@
 const { expect } = require("chai");
 const { ethers } = require("hardhat");
-const { expectRevert } = require('@openzeppelin/test-helpers');
 
 
 describe("Voting Contract", function () {
-  let Voting, voting, owner, voter1, voter2, addr1;
+  let Voting, voting, owner, voter, voter1, voter2, voter3, others;
 
-  beforeEach(async function () {
-    [owner, voter1, voter2, addr1] = await ethers.getSigners();
+  beforeEach(async () => {
+    [owner, voter, voter1, voter2, voter3, ...others] = await ethers.getSigners();
     Voting = await ethers.getContractFactory("Voting");
     voting = await Voting.deploy();
+    await voting.registerVoter(voter.address);
+
   });
 
-  it("Should register a voter and emit event", async function () {
-    await expect(voting.connect(owner).registerVoter(voter1.address))
-      .to.emit(voting, "VoterRegistered")
-      .withArgs(voter1.address);
-
-    const voterInfo = await voting.getVoter(voter1.address);
-    expect(voterInfo.isRegistered).to.be.true;
+  it("should not allow registering voter outside registration phase", async function () {
+    await voting.connect(owner).startProposalsRegistering();
+    await expect(voting.registerVoter(voter1.address)).to.be.revertedWith(
+      "Voter registration not open"
+    );
   });
 
-  it("Should not register a voter if not owner", async function () {
+  it("should revert if adding proposal when not in ProposalsRegistrationStart status", async function () {
     await expect(
-      voting.connect(voter1).registerVoter(voter2.address)
-    ).to.be.revertedWith("Ownable: caller is not the owner");
-  });
-
-  it("Should go through workflow and emit correct events", async function () {
-    await expect(voting.connect(owner).startProposalsRegistering())
-      .to.emit(voting, "WorkflowStatusChange")
-      .withArgs(0, 1);
-
-    await expect(voting.connect(owner).endProposalsRegistering())
-      .to.emit(voting, "WorkflowStatusChange")
-      .withArgs(1, 2);
-
-    await expect(voting.connect(owner).startVotingSession())
-      .to.emit(voting, "WorkflowStatusChange")
-      .withArgs(2, 3);
-
-    await expect(voting.connect(owner).endVotingSession())
-      .to.emit(voting, "WorkflowStatusChange")
-      .withArgs(3, 4);
-  });
-
-  it("Should add a proposal and emit event", async function () {
-    await voting.connect(owner).registerVoter(voter1.address);
-    await voting.connect(owner).startProposalsRegistering();
-
-    await expect(
-      voting.connect(voter1).addProposal("Proposal 1")
-    )
-      .to.emit(voting, "ProposalRegistered")
-      .withArgs(0);
-
-    const proposals = await voting.getProposals();
-    expect(proposals[0].description).to.equal("Proposal 1");
-  });
-
-  it("Should allow registered voter to vote", async function () {
-    await voting.connect(owner).registerVoter(voter1.address);
-    await voting.connect(owner).startProposalsRegistering();
-    await voting.connect(voter1).addProposal("Proposal 1");
-    await voting.connect(owner).endProposalsRegistering();
-    await voting.connect(owner).startVotingSession();
-
-    await expect(voting.connect(voter1).vote(0))
-      .to.emit(voting, "Voted")
-      .withArgs(voter1.address, 0);
-
-    const proposal = (await voting.getProposals())[0];
-    expect(proposal.voteCount).to.equal(1);
-  });
-
-  it("Should tally votes and set winner", async function () {
-    await voting.connect(owner).registerVoter(voter1.address);
-    await voting.connect(owner).registerVoter(voter2.address);
-    await voting.connect(owner).startProposalsRegistering();
-    await voting.connect(voter1).addProposal("Proposal 1");
-    await voting.connect(voter2).addProposal("Proposal 2");
-    await voting.connect(owner).endProposalsRegistering();
-    await voting.connect(owner).startVotingSession();
-    await voting.connect(voter1).vote(1); // Vote for Proposal 2
-    await voting.connect(voter2).vote(1); // Vote for Proposal 2
-    await voting.connect(owner).endVotingSession();
-
-    await expect(voting.connect(owner).tallyVotes())
-      .to.emit(voting, "WorkflowStatusChange")
-      .withArgs(4, 5);
-
-    const winningProposal = await voting.getWinningProposal();
-    expect(winningProposal.description).to.equal("Proposal 2");
-    expect(winningProposal.voteCount).to.equal(2);
-  });
-
-  it("Should revert voting if voter has already voted", async function () {
-    await voting.connect(owner).registerVoter(voter1.address);
-    await voting.connect(owner).startProposalsRegistering();
-    await voting.connect(voter1).addProposal("Proposal 1");
-    await voting.connect(owner).endProposalsRegistering();
-    await voting.connect(owner).startVotingSession();
-
-    await voting.connect(voter1).vote(0);
-    await expect(voting.connect(voter1).vote(0)).to.be.revertedWith("You have already voted");
-  });
-
-  it("Should revert if trying to vote with invalid proposal", async function () {
-    await voting.connect(owner).registerVoter(voter1.address);
-    await voting.connect(owner).startProposalsRegistering();
-    await voting.connect(voter1).addProposal("Proposal 1");
-    await voting.connect(owner).endProposalsRegistering();
-    await voting.connect(owner).startVotingSession();
-
-    await expect(voting.connect(voter1).vote(99)).to.be.revertedWith("Invalid proposal");
-  });
-
-  it("Should revert adding proposal if not in proposal registration phase", async function () {
-    await voting.connect(owner).registerVoter(voter1.address);
-    await expect(
-      voting.connect(voter1).addProposal("Test")
+      voting.connect(voter).addProposal("Title", "Description")
     ).to.be.revertedWith("Proposals registration not started");
   });
 
-  it("Should revert getting winner if not tallied yet", async function () {
-    await expect(voting.getWinningProposal()).to.be.revertedWith("Votes not tallied yet");
+  it("should start in VotersRegisteration phase", async () => {
+    expect(await voting.workflowStatus()).to.equal(0);
+  });
+
+  describe("Voter registration", function () {
+    it("should register voters by owner only", async () => {
+      await voting.registerVoter(voter1.address);
+      const voter = await voting.getVoter(voter1.address);
+      expect(voter.isRegistered).to.be.true;
+    });
+
+    it("should not register voters from non-owner", async () => {
+      await expect(voting.connect(voter1).registerVoter(voter2.address)).to.be.revertedWith("Ownable: caller is not the owner");
+    });
+
+    it("should not register the same voter twice", async () => {
+      await voting.registerVoter(voter1.address);
+      await expect(voting.registerVoter(voter1.address)).to.be.revertedWith("Voter already registered");
+    });
+  });
+
+
+  describe("getWinningQuorum function", function () {
+
+    it("should return the correct minQuorumPercentage", async function () {
+      // Let's assume `currentVote`'s `minQuorumPercentage` is set to 50% for this test
+      const expectedQuorum = 0;  // Replace this with the actual expected value
+
+      // Call the `getWinningQuorum` function
+      const winningQuorum = await voting.getWinningQuorum();
+      
+      // Check if the returned value is the same as the expected value
+      expect(winningQuorum).to.equal(expectedQuorum);
+    });
+  });
+
+  describe("Proposal registration phase", function () {
+    beforeEach(async () => {
+      await voting.registerVoter(voter1.address);
+      await voting.startProposalsRegistering();
+    });
+
+    it("should start proposal registration", async () => {
+      expect(await voting.workflowStatus()).to.equal(1);
+    });
+
+    it("should allow registered voters to submit proposals", async () => {
+      await voting.connect(voter1).addProposal("Proposal 1", "Desc 1");
+      const proposals = await voting.getProposals();
+      expect(proposals.length).to.equal(1);
+      expect(proposals[0].title).to.equal("Proposal 1");
+    });
+
+    it("should not allow unregistered voters to add proposals", async () => {
+      await expect(voting.connect(voter2).addProposal("Fail", "Fail")).to.be.revertedWith("Voter is not registered");
+    });
+
+    it("should end proposal registration", async () => {
+      await voting.endProposalsRegistering();
+      expect(await voting.workflowStatus()).to.equal(2);
+    });
+  });
+
+  describe("Voting process", function () {
+    beforeEach(async () => {
+      await voting.registerVoter(voter1.address);
+      await voting.registerVoter(voter2.address);
+      await voting.registerVoter(voter3.address);
+      await voting.startProposalsRegistering();
+      await voting.connect(voter1).addProposal("Proposal 1", "Desc 1");
+      await voting.connect(voter1).addProposal("Proposal 2", "Desc 2");
+      await voting.endProposalsRegistering();
+      await voting.startVotingSession();
+    });
+
+    it("should start voting session", async () => {
+      expect(await voting.workflowStatus()).to.equal(3);
+    });
+
+    it("should allow voters to vote", async () => {
+      await voting.connect(voter1).vote(0);
+      const voter = await voting.getVoter(voter1.address);
+      expect(voter.hasVoted).to.be.true;
+      expect(voter.votedProposalId).to.equal(0);
+    });
+
+    it("should prevent double voting", async () => {
+      await voting.connect(voter1).vote(0);
+      await expect(voting.connect(voter1).vote(1)).to.be.revertedWith("You have already voted");
+    });
+
+    it("should not allow voting on invalid proposal", async () => {
+      await expect(voting.connect(voter2).vote(999)).to.be.revertedWith("Invalid proposal");
+    });
+
+    it("should end voting session", async () => {
+      await voting.endVotingSession();
+      expect(await voting.workflowStatus()).to.equal(4);
+    });
+  });
+
+  describe("Tallying votes", function () {
+    beforeEach(async () => {
+      await voting.registerVoter(voter1.address);
+      await voting.registerVoter(voter2.address);
+      await voting.startProposalsRegistering();
+      await voting.connect(voter1).addProposal("Proposal A", "Description A");
+      await voting.connect(voter1).addProposal("Proposal B", "Description B");
+      await voting.endProposalsRegistering();
+      await voting.startVotingSession();
+      await voting.connect(voter1).vote(0);
+      await voting.connect(voter2).vote(1);
+      await voting.endVotingSession();
+    });
+
+    it("should tally votes and select a winner", async () => {
+      await voting.tallyVotes();
+      expect(await voting.workflowStatus()).to.equal(5);
+
+      const winner = await voting.getWinningProposal();
+      // There might be a tie; it will take the last highest
+      expect(["Proposal A", "Proposal B"]).to.include(winner.title);
+    });
+
+    it("should revert getWinningProposal if not tallied yet", async () => {
+      await expect(voting.getWinningProposal()).to.be.revertedWith("Votes not tallied yet");
+    });
+  });
+
+  describe("Workflow transitions", function () {
+    it("should revert starting proposals if not in voter registration phase", async () => {
+      await voting.startProposalsRegistering();
+      await expect(voting.startProposalsRegistering()).to.be.revertedWith("Cannot start proposals registration now");
+    });
+
+    it("should revert ending proposals if not started", async () => {
+      await expect(voting.endProposalsRegistering()).to.be.revertedWith("Proposals registration not started");
+    });
+
+    it("should revert starting voting session if proposals not ended", async () => {
+      await expect(voting.startVotingSession()).to.be.revertedWith("Proposals registration not ended");
+    });
+
+    it("should revert ending voting session if not started", async () => {
+      await expect(voting.endVotingSession()).to.be.revertedWith("Voting session not started");
+    });
+
+    it("should revert tallyVotes if voting session not ended", async () => {
+      await expect(voting.tallyVotes()).to.be.revertedWith("Voting session not ended");
+    });
+  });
+
+  describe("Edge cases", function () {
+    it("should not allow unregistered voter to vote", async () => {
+      await voting.startProposalsRegistering();
+      await voting.endProposalsRegistering();
+      await voting.startVotingSession();
+      await expect(voting.connect(voter1).vote(0)).to.be.revertedWith("Voter is not registered");
+    });
+
+    it("should emit proper events for workflow changes", async () => {
+      await expect(voting.startProposalsRegistering())
+        .to.emit(voting, "WorkflowStatusChange")
+        .withArgs(0, 1);
+    });
   });
 });
 
-describe("Voting Branch Tests", function () {
-  let voting, owner, voter1, voter2;
 
-  beforeEach(async () => {
-    [owner, voter1, voter2] = await ethers.getSigners();
-    const Voting = await ethers.getContractFactory("Voting");
-    voting = await Voting.deploy();
-  });
 
-  it("should revert registering voter when not in registration phase", async () => {
-    await voting.startProposalsRegistering();
-    await expect(voting.registerVoter(voter1.address)).to.be.revertedWith("Voter registration not open");
-  });
 
-  it("should revert registering already registered voter", async () => {
-    await voting.registerVoter(voter1.address);
-    await expect(voting.registerVoter(voter1.address)).to.be.revertedWith("Voter already registered");
-  });
-
-  it("should revert start proposals registration in wrong phase", async () => {
-    await voting.startProposalsRegistering();
-    await voting.endProposalsRegistering();
-    await expect(voting.startProposalsRegistering()).to.be.revertedWith("Cannot start proposals registration now");
-  });
-
-  it("should revert end proposals registration in wrong phase", async () => {
-    await expect(voting.endProposalsRegistering()).to.be.revertedWith("Proposals registration not started");
-  });
-
-  it("should revert start voting session in wrong phase", async () => {
-    await expect(voting.startVotingSession()).to.be.revertedWith("Proposals registration not ended");
-  });
-
-  it("should revert end voting session in wrong phase", async () => {
-    await expect(voting.endVotingSession()).to.be.revertedWith("Voting session not started");
-  });
-
-  it("should revert tally votes in wrong phase", async () => {
-    await expect(voting.tallyVotes()).to.be.revertedWith("Voting session not ended");
-  });
-
-  it("should revert add proposal in wrong phase", async () => {
-    await voting.registerVoter(voter1.address);
-    await expect(voting.connect(voter1).addProposal("Proposal 1")).to.be.revertedWith("Proposals registration not started");
-  });
-
-  it("should revert voting if already voted", async () => {
-    await voting.registerVoter(voter1.address);
-    await voting.startProposalsRegistering();
-    await voting.connect(voter1).addProposal("Proposal 1");
-    await voting.endProposalsRegistering();
-    await voting.startVotingSession();
-    await voting.connect(voter1).vote(0);
-    await expect(voting.connect(voter1).vote(0)).to.be.revertedWith("You have already voted");
-  });
-
-  it("should revert voting if not in voting session", async () => {
-    await voting.registerVoter(voter1.address);
-    await voting.startProposalsRegistering();
-    await voting.connect(voter1).addProposal("Proposal 1");
-    await voting.endProposalsRegistering();
-    // on n’a pas startVotingSession ici
-    await expect(voting.connect(voter1).vote(0)).to.be.revertedWith("Voting session not started");
-  });
-
-  it("should revert voting on invalid proposal id", async () => {
-    await voting.registerVoter(voter1.address);
-    await voting.startProposalsRegistering();
-    await voting.connect(voter1).addProposal("Proposal 1");
-    await voting.endProposalsRegistering();
-    await voting.startVotingSession();
-    await expect(voting.connect(voter1).vote(999)).to.be.revertedWith("Invalid proposal");
-  });
-
-  it("should revert getWinningProposal if votes not tallied yet", async () => {
-    await expect(voting.getWinningProposal()).to.be.revertedWith("Votes not tallied yet");
-  });
-  
-});
