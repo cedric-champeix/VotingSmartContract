@@ -47,7 +47,7 @@ export const Navbar = () => {
       <div className='navbar sticky top-0 left-0 bg-background right-0 z-50 border-b-2 border-primary'>
         {/* Display only on screens larger than 'sm' */}
         <div className='hidden md:flex items-center justify-between p-4 text-primary px-8 select-none'>
-          <div className='font-extrabold text-3xl'>
+          <div className='font-extrabold text-3xl' style={{ fontFamily: 'Antic Didone, serif' }}>
             <Link to='/' onClick={() => navigate('/')}>
               Crypto TCG
             </Link>
