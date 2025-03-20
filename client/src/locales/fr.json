@@ -64,7 +64,8 @@
   "login": {
     "title": "Bienvenue ! ",
     "subtitle": "Accédez à votre tableau de bord et interagissez avec la blockchain en toute sécurité.",
-    "button": "Se connecter avec Metamask"
+    "button": "Se connecter avec son wallet",
+    "loading": "Chargement, veuillez patienter..."
   },
   "vote": {
     "pageTitle": "Votez !",

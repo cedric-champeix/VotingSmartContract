@@ -39,7 +39,8 @@
   "login": {
     "title": "Welcome ! ",
     "subtitle": "Access your dashboard and interact with the blockchain securely.",
-    "button": "Connect with Metamask"
+    "button": "Connect with your wallet",
+    "loading": "Loading, please wait..."
   },
   "footer": {
     "copyright": {
