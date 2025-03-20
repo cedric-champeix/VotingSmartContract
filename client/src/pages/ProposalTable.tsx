@@ -19,7 +19,11 @@ import { Input } from '@/components/ui/input';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Separator } from '@/components/ui/separator';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import {useTranslation} from "react-i18next";
+import { useTranslation } from 'react-i18next';
+
+import { createPublicClient, http } from 'viem';
+import { localhost } from 'viem/chains';
+import constants from '@/constants/index';
 
 export type Proposal = {
   description: string;
@@ -34,9 +38,25 @@ export function ProposalTable() {
   const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
 
+  const client = createPublicClient({
+    chain: localhost,
+    transport: http('http://127.0.0.1:8545'),
+  });
+
   async function fetchProposals() {
-    //TODO: Récupérer les propositions depuis l'API
-    return [];
+    try {
+      const value = await client.readContract({
+        address: constants.contractAddress,
+        abi: constants.contractAbi,
+        functionName: 'getProposals',
+      });
+
+      console.log('Contract value:', value);
+      // Si value est un tableau de propositions, tu peux les mettre à jour ici
+      setProposals(value);
+    } catch (error) {
+      console.error('Error fetching proposals:', error);
+    }
   }
 
   React.useEffect(() => {
@@ -77,11 +97,11 @@ export function ProposalTable() {
 
   return (
     <div className='w-full p-16'>
-      <h1 className='text-4xl'>{t("table.votes.title")}</h1>
+      <h1 className='text-4xl'>{t('table.votes.title')}</h1>
       <div className='flex w-full items-center justify-between py-4'>
         <div className='flex gap-4 items-center'>
           <Input
-            placeholder={t("table.votes.searchProposal")}
+            placeholder={t('table.votes.searchProposal')}
             value={(table.getColumn('description')?.getFilterValue() as string) ?? ''}
             onChange={(event) => table.getColumn('description')?.setFilterValue(event.target.value)}
             className='max-w-sm'
@@ -125,8 +145,8 @@ export function ProposalTable() {
         <Separator />
         <div className='flex flex-col items-center justify-between gap-4 p-4 md:flex-row'>
           <div className='text-sm text-gray-600'>
-            Page <strong>{table.getState().pagination.pageIndex + 1}</strong> {t('table.votes.footer.pageNb')} <strong>{table.getPageCount()}</strong> •{' '}
-            {proposals.length} {t('table.votes.footer.totalPage')}
+            Page <strong>{table.getState().pagination.pageIndex + 1}</strong> {t('table.votes.footer.pageNb')}{' '}
+            <strong>{table.getPageCount()}</strong> • {proposals.length} {t('table.votes.footer.totalPage')}
           </div>
           <div className='flex items-center space-x-2'>
             <Button variant='outline' size='sm' onClick={() => table.setPageIndex(0)} disabled={!table.getCanPreviousPage()}>
