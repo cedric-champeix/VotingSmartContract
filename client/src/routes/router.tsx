@@ -2,11 +2,11 @@ import { ErrorPage } from '../pages/ErrorPage';
 import { createBrowserRouter, Outlet } from 'react-router-dom';
 import { Navbar } from '../components/Navbar';
 import { Footer } from '@/components/Footer';
-import LoginPage, { Login } from '@/pages/Authentication/Login';
+import LoginPage from '@/pages/Authentication/Login';
 import { Home } from '@/pages/Home';
 import { ProtectedRoute } from './protectedRoute';
-import {About} from "@/pages/About";
-import {Vote} from "@/pages/Vote/Vote";
+import { About } from '@/pages/About';
+import { Vote } from '@/pages/Vote/Vote';
 
 const RootLayout = () => {
   return (
@@ -34,12 +34,12 @@ export const router = createBrowserRouter([
       },
       {
         path: '/about',
-        element: <About/>,
+        element: <About />,
       },
       {
         path: '/vote',
-        element: <Vote/>
-      }
+        element: <Vote />,
+      },
     ],
   },
   {
