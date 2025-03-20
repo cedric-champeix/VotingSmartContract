@@ -3,12 +3,11 @@ import { ThemeChanger } from './ThemeChanger';
 import { LanguageChanger } from './LanguageChanger';
 import { useTranslation } from 'react-i18next';
 import { Separator } from '../ui/separator';
-import { Briefcase, FileText, House, Info, LogOut, Mail, Menu, PersonStanding, StickyNote, Users, X } from 'lucide-react';
+import { House, LogOut, Menu, Users, X } from 'lucide-react';
 import { useState, useEffect, useRef } from 'react';
 import { cn } from '@/lib/utils';
 import { Button } from '../ui/button';
 import { useLogout } from '@/hooks/useLogout';
-import { useWeb3 } from '@/hooks/useWeb3';
 import { Avatar, AvatarFallback } from '../ui/avatar';
 import {
   DropdownMenuItem,
@@ -20,6 +19,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuShortcut,
 } from '../ui/dropdown-menu';
+import { useAccount } from 'wagmi';
 
 export const Navbar = () => {
   const { t } = useTranslation();
@@ -28,7 +28,7 @@ export const Navbar = () => {
   const navigate = useNavigate();
 
   const { logout, loading } = useLogout();
-  const { account } = useWeb3();
+  const { address } = useAccount();
 
   // Handle clicks outside of the menu
   useEffect(() => {
@@ -60,14 +60,14 @@ export const Navbar = () => {
               <DropdownMenu>
                 <DropdownMenuTrigger>
                   <Avatar>
-                    <AvatarFallback className='bg-gray-200 dark:bg-gray-800'>{account.slice(0, 3)}</AvatarFallback>
+                    <AvatarFallback className='bg-gray-200 dark:bg-gray-800'>{address.slice(0, 3)}</AvatarFallback>
                   </Avatar>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className='w-40'>
                   <DropdownMenuLabel>{t('navbar.myAccount')}</DropdownMenuLabel>
                   <DropdownMenuSeparator />
                   <DropdownMenuGroup>
-                    <DropdownMenuItem className='flex gap-4 items-center justify-start' onClick={() => logout()}>
+                    <DropdownMenuItem className='flex gap-4 items-center justify-start' disabled={loading} onClick={() => logout()}>
                       {t('navbar.logout')}
                       <LogOut className='w-4 h-4' />
                       <DropdownMenuShortcut></DropdownMenuShortcut>
