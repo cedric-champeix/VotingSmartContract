@@ -12,21 +12,21 @@ export const About = () => {
       role: t('about.cedric.role'),
       bio: t('about.cedric.bio'),
       github: 'https://github.com/cedric-champeix',
-      image: '../../public/images/cedric.png',
+      image: '/images/cedric.png',
     },
     {
       name: t('about.teo.name'),
       role: t('about.teo.role'),
       bio: t('about.teo.bio'),
       github: 'https://github.com/teovlt',
-      image: '../../public/images/teo.png',
+      image: '/images/teo.png',
     },
     {
       name: t('about.gabin.name'),
       role: t('about.gabin.role'),
       bio: t('about.gabin.bio'),
       github: 'https://github.com/Onibagg',
-      image: '../../public/images/gabin.jpg',
+      image: '/images/gabin.jpg',
     },
   ];
 
