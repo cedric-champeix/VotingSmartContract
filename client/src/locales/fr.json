@@ -34,7 +34,7 @@
     "contact": "Contact",
     "logout": "Déconnexion",
     "myAccount": "Mon compte",
-    "vote": "Vote"
+    "vote": "Voter"
   },
   "footer": {
     "copyright": {
@@ -65,5 +65,13 @@
     "title": "Bienvenue ! ",
     "subtitle": "Accédez à votre tableau de bord et interagissez avec la blockchain en toute sécurité.",
     "button": "Se connecter avec Metamask"
+  },
+  "vote": {
+    "pageTitle": "Votez !",
+    "pageSubtitle": "Votez pour votre proposition préférée",
+    "button": "Voter",
+    "thankYou": "Merci !",
+    "for": "Vous avez voté pour",
+    "submit": "Soumettre le vote"
   }
 }

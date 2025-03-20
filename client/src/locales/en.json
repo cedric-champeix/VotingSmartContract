@@ -65,5 +65,13 @@
       "role": "Troubadour",
       "bio": "Gabin is a computer science student at the University of Technology of Compiègne. He is passionate about programming and new technologies. He worked on the front-end of this project."
     }
+  },
+  "vote": {
+    "pageTitle": "Vote !",
+    "pageSubtitle": "Vote for your favorite proposal",
+    "button": "Vote",
+    "thankYou": "Thank you !",
+    "for": "You voted for",
+    "submit": "Submit the vote"
   }
 }

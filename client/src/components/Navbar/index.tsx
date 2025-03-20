@@ -3,7 +3,7 @@ import { ThemeChanger } from './ThemeChanger';
 import { LanguageChanger } from './LanguageChanger';
 import { useTranslation } from 'react-i18next';
 import { Separator } from '../ui/separator';
-import { House, LogOut, Menu, Users, X } from 'lucide-react';
+import { House, LogOut, Menu, Users, Vote, X } from 'lucide-react';
 import { useState, useEffect, useRef } from 'react';
 import { cn } from '@/lib/utils';
 import { Button } from '../ui/button';
@@ -54,6 +54,9 @@ export const Navbar = () => {
           </div>
           <div className='flex gap-4 items-center'>
             <div className='flex gap-12 items-center'>
+              <Link to='/vote' onClick={() => navigate('/vote')}>
+                {t('navbar.vote')}
+              </Link>
               <Link to='/about' onClick={() => navigate('/about')}>
                 {t('navbar.about')}
               </Link>
@@ -116,7 +119,17 @@ export const Navbar = () => {
               <House className='w-4 h-4' />
               {t('navbar.home')}
             </Button>
-
+            <Button
+              onClick={() => {
+                navigate('/vote');
+                setIsOpen(false);
+              }}
+              variant='link'
+              className='flex gap-4 items-center justify-start'
+            >
+              <Vote className='w-4 h-4' />
+              {t('navbar.vote')}
+            </Button>
             <Button
               onClick={() => {
                 navigate('/about');
