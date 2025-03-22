@@ -4,13 +4,24 @@ import './styles/index.css';
 import { RouterProvider } from 'react-router-dom';
 import { router } from './routes/router';
 import { ThemeProvider } from './providers/theme-provider';
-import { WagmiProvider } from 'wagmi';
+import { http, WagmiProvider } from 'wagmi';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { getDefaultConfig, RainbowKitProvider } from '@rainbow-me/rainbowkit';
 import '@rainbow-me/rainbowkit/styles.css';
-
 import './lib/i18n';
-import { config } from './lib/wagmi';
+
+import { hardhat } from 'viem/chains';
+
+const config = getDefaultConfig({
+  transports: {
+    [hardhat.id]: http("http://localhost:8545"),
+  },
+  appName: 'My RainbowKit App',
+  projectId: "275f621740bfee01ee9f2bf973dc15fb",
+  chains: [hardhat],
+  ssr: true,
+});
+
 
 const queryClient = new QueryClient();
 

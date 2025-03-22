@@ -1,12 +1,13 @@
-const { config: dotenvConfig } = require('dotenv');
+import { config as dotenvConfig } from 'dotenv';
 dotenvConfig();
-require('@nomicfoundation/hardhat-toolbox');
+import '@nomicfoundation/hardhat-toolbox';
+import "@nomicfoundation/hardhat-verify";
 
 const SEPOLIA_RPC_URL = process.env.SEPOLIA_RPC_URL || '';
 const PRIVATE_KEY = process.env.PRIVATE_KEY || '';
 const ETHERSCAN_API_KEY = process.env.ETHERSCAN_API_KEY || '';
 
-module.exports = {
+const config = {
   defaultNetwork: 'hardhat',
   networks: {
     sepolia: {
@@ -29,6 +30,12 @@ module.exports = {
     compilers: [
       {
         version: '0.8.28',
+        settings: {
+          optimizer: {
+            enabled: true,
+            runs: 50,
+          },
+        },
       },
     ],
   },
@@ -36,3 +43,5 @@ module.exports = {
     enabled: true,
   },
 };
+
+export default config;

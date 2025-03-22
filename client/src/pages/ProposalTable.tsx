@@ -1,6 +1,6 @@
 'use client';
 
-import * as React from 'react';
+import { useState } from 'react';
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -21,49 +21,24 @@ import { Separator } from '@/components/ui/separator';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useTranslation } from 'react-i18next';
 
-import { createPublicClient, http } from 'viem';
-import { localhost } from 'viem/chains';
-import constants from '@/constants/index';
-
-export type Proposal = {
-  description: string;
-  voteCount: number;
-};
+import useProposal, { Proposal } from '@/hooks/useProposal';
 
 export function ProposalTable() {
   const { t } = useTranslation();
-  const [proposals, setProposals] = React.useState<Proposal[]>([]);
-  const [sorting, setSorting] = React.useState<SortingState>([]);
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
-  const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
-  const [rowSelection, setRowSelection] = React.useState({});
+  
+  const {proposals, getProposals} = useProposal();
 
-  const client = createPublicClient({
-    chain: localhost,
-    transport: http('http://127.0.0.1:8545'),
-  });
-
-  async function fetchProposals() {
-    try {
-      const value = await client.readContract({
-        address: constants.contractAddress,
-        abi: constants.contractAbi,
-        functionName: 'getProposals',
-      });
-
-      console.log('Contract value:', value);
-      // Si value est un tableau de propositions, tu peux les mettre à jour ici
-      setProposals(value);
-    } catch (error) {
-      console.error('Error fetching proposals:', error);
-    }
-  }
-
-  React.useEffect(() => {
-    fetchProposals();
-  }, []);
+  const [sorting, setSorting] = useState<SortingState>([]);
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
+  const [rowSelection, setRowSelection] = useState({});
 
   const columns: ColumnDef<Proposal>[] = [
+    {
+      id: 'title',
+      header: t('table.votes.collumn.title'),
+      cell: (cell) => <div>{cell.getValue() as string}</div>,
+    },
     {
       id: 'description',
       header: t('table.votes.collumn.desc'),
@@ -106,7 +81,7 @@ export function ProposalTable() {
             onChange={(event) => table.getColumn('description')?.setFilterValue(event.target.value)}
             className='max-w-sm'
           />
-          <Button variant='outline' onClick={() => fetchProposals()}>
+          <Button variant='outline' onClick={() => getProposals()}>
             <RefreshCw className='w-4 h-4' />
           </Button>
         </div>

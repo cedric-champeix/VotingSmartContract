@@ -1,13 +1,12 @@
 'use client';
 
-import { createPublicClient, http } from 'viem';
-import { localhost } from 'viem/chains';
-import constants from '@/constants/index';
+import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
+import useProposal from '@/hooks/useProposal';
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { useState, useEffect } from "react";
-import { useTranslation } from "react-i18next";
+import Proposaldialog from "../Proposals/components/ProposalDialog";
 
 export type Vote = {
   id: string;
@@ -57,60 +56,35 @@ const fallbackProposals = [
 
 export const VoteForm = () => {
   const { t } = useTranslation();
-  const [selectedOption, setSelectedOption] = useState<string | null>(null);
+
+  const { proposals, createProposal } = useProposal();
+
+  const [selectedOption, setSelectedOption] = useState<number | null>(null);
   const [submitted, setSubmitted] = useState(false);
   const [votedOption, setVotedOption] = useState<string | null>(null);
-  const [propositions, setPropositions] = useState<Vote[]>(fallbackProposals);
+  // const [propositions, setPropositions] = useState<Vote[]>(fallbackProposals);
 
-  const client = createPublicClient({
-    chain: localhost,
-    transport: http('http://127.0.0.1:8545'),
-  });
 
-  async function fetchProposals() {
-    try {
-      const proposals = await client.readContract({
-        address: constants.contractAddress,
-        abi: constants.contractAbi,
-        functionName: 'getProposals',
-      });
-
-      const formattedProposals = proposals.map((proposal: any, index: number) => ({
-        id: `proposition${index + 1}`,
-        title: proposal.title,
-        description: proposal.description,
-        voteCount: proposal.voteCount || 0,
-      }));
-
-      setPropositions(formattedProposals);
-    } catch (error) {
-      console.error('Error fetching proposals:', error);
-    }
-  }
-
-  useEffect(() => {
-    fetchProposals();
-  }, []);
-
-  const handleVote = () => {
-    if (selectedOption) {
-      setPropositions(prevPropositions =>
-        prevPropositions.map(proposition =>
-          proposition.id === selectedOption
-            ? { ...proposition, voteCount: proposition.voteCount + 1 }
-            : proposition
-        )
-      );
-      setVotedOption(selectedOption); // on "fixe" l'option votée
-      setSubmitted(true);
-    }
-  };
+  // const handleVote = () => {
+  //   if (selectedOption) {
+  //     setPropositions(prevPropositions =>
+  //       prevPropositions.map((proposition) =>
+  //         proposition.id === selectedOption
+  //           ? { ...proposition, voteCount: proposition.voteCount + 1 }
+  //           : proposition
+  //       )
+  //     );
+  //     setVotedOption(selectedOption); // on "fixe" l'option votée
+  //     setSubmitted(true);
+  //   }
+  // };
 
   return (
     <div className="container mx-auto p-6 text-center relative">
+      <Proposaldialog createProposal={createProposal}/>
       {submitted && votedOption && (
         <div className="bg-green-100 text-green-700 dark:bg-green-700 dark:text-green-100 p-4 rounded-md mb-6">
-          {t("vote.thankYou")} {t("vote.for")} {propositions.find(p => p.id === votedOption)?.title}
+          {t("vote.thankYou")} {t("vote.for")} {proposals[0]?.title}
         </div>
       )}
       <h1 className="text-4xl font-extrabold mb-5 text-primary">
@@ -121,20 +95,20 @@ export const VoteForm = () => {
       </p>
       {selectedOption && !submitted && (
         <div className="text-center bg-transname parent p-4 bottom-20">
-          <Button onClick={handleVote} className="dark:hover:bg-accent hover:bg-accent">
+          <Button onClick={null} className="dark:hover:bg-accent hover:bg-accent">
             {t("vote.submit")}
           </Button>
         </div>
       )}
 
       <div className="grid gap-6 grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 max-w-6xl mx-auto">
-        {propositions.map((proposition) => (
+        {proposals.map((proposition, index) => (
           <Card
-            key={proposition.id}
+            key={index}
             className={`p-6 shadow-xl rounded-2xl bg-white dark:bg-gray-800 cursor-pointer transition hover:bg-gray-100 ${
-              selectedOption === proposition.id ? "border-primary bg-blue-50" : "border-gray-300"
+              selectedOption === index ? "border-primary bg-blue-50" : "border-gray-300"
             }`}
-            onClick={() => setSelectedOption(proposition.id)}
+            onClick={() => setSelectedOption(index)}
           >
             <CardContent>
               <h2 className="text-xl text-primary dark:text-primary-foreground font-bold mb-2">{proposition.title}</h2>

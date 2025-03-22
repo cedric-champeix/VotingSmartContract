@@ -4,6 +4,7 @@
       "title": "Liste des votes",
       "searchProposal": "Rechercher une proposition",
       "collumn": {
+        "title": "Titre",
         "desc": "Description",
         "voteCount": "Nombre de votes"
       },
@@ -28,6 +29,7 @@
   },
   "navbar": {
     "home": "Accueil",
+    "admin": "Admin",
     "about": "À propos",
     "projects": "Projets",
     "services": "Services",
@@ -74,5 +76,14 @@
     "thankYou": "Merci !",
     "for": "Vous avez voté pour",
     "submit": "Soumettre le vote"
+  },
+  "proposal": {
+    "createProposal": "Créer une proposition",
+    "dialog": {
+      "title": "Créer une proposition",
+      "titleLabel": "Titre",
+      "descriptionLabel": "Déscription",
+      "create": "Créer"
+    }
   }
 }

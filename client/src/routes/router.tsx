@@ -8,6 +8,7 @@ import { ProtectedRoute } from './protectedRoute';
 import { About } from '@/pages/About';
 import { Vote } from '@/pages/Vote/Vote';
 import { useAccount } from 'wagmi';
+import AdminDashboard from '@/pages/Admin/AdminDashboard';
 
 const RootLayout = () => {
   return (
@@ -53,6 +54,10 @@ export const router = createBrowserRouter([
         path: '/vote',
         element: <Vote />,
       },
+      {
+        path: '/admin',
+        element: <AdminDashboard />,
+      }
     ],
   },
   {

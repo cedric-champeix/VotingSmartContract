@@ -54,6 +54,9 @@ export const Navbar = () => {
           </div>
           <div className='flex gap-4 items-center'>
             <div className='flex gap-12 items-center'>
+              <Link to='/admin' onClick={() => navigate('/admin')}>
+                {t('navbar.admin')}
+              </Link>
               <Link to='/vote' onClick={() => navigate('/vote')}>
                 {t('navbar.vote')}
               </Link>

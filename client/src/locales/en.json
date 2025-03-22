@@ -4,6 +4,7 @@
       "title": "Votes list",
       "searchProposal": "Search proposal",
       "collumn": {
+        "title": "Title",
         "desc": "Description",
         "voteCount": "Number of votes"
       },
@@ -28,6 +29,7 @@
   },
   "navbar": {
     "home": "Home",
+    "admin": "Admin",
     "about": "About",
     "projects": "Projects",
     "services": "Services",
@@ -74,5 +76,14 @@
     "thankYou": "Thank you !",
     "for": "You voted for",
     "submit": "Submit the vote"
+  },
+  "proposal": {
+    "createProposal": "Create a proposal",
+    "dialog": {
+      "title": "Create a proposal",
+      "titleLabel": "Title",
+      "descriptionLabel": "Description",
+      "create": "Create"
+    }
   }
 }
