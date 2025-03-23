@@ -93,5 +93,13 @@
       "addressLabel": "Voter address",
       "create": "Create"
     }
-  }
+  },
+  "workflowStatus": [
+    "Voters registration",
+    "Proposals registration started",
+    "Proposals registration ended",
+    "Votes session started",
+    "Votes session ended",
+    "Tallying votes"
+  ]
 }

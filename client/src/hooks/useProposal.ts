@@ -27,3 +27,4 @@ export default function useProposal(): Omit<UseReadContractReturnType, 'data'> &
 
   return {...res, data: res.data as Proposal[] ?? []};
 }
+  

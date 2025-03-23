@@ -93,5 +93,13 @@
       "addressLabel": "Adresse",
       "create": "Ajouter"
     }
-  }
+  },
+  "workflowStatus": [
+    "Inscription des votants",
+    "Création des propositions",
+    "Fin de la création des propositions",
+    "Début des votes",
+    "Fin des votes",
+    "Décompte des votes"
+  ]
 }

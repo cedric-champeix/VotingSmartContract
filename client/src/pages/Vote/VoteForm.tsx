@@ -7,6 +7,10 @@ import useProposal from '@/hooks/useProposal';
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Proposaldialog from "../Proposals/components/ProposalDialog";
+import useVoter from "@/hooks/useVoter";
+import { useAccount, useWriteContract } from "wagmi";
+import { contractABI, contractAddress } from "@/constants";
+import { hardhat } from "wagmi/chains";
 
 export type Vote = {
   id: string;
@@ -15,76 +19,44 @@ export type Vote = {
   voteCount: number;
 };
 
-const fallbackProposals = [
-  {
-    id: "proposition1",
-    title: "Proposition 1",
-    description: "Vote for your favorite proposition",
-    voteCount: 0,
-  },
-  {
-    id: "proposition2",
-    title: "Proposition 2",
-    description: "Vote for your favorite proposition",
-    voteCount: 1,
-  },
-  {
-    id: "proposition3",
-    title: "Proposition 3",
-    description: "Vote for your favorite proposition",
-    voteCount: 2,
-  },
-  {
-    id: "proposition4",
-    title: "Proposition 4",
-    description: "Vote for your favorite proposition",
-    voteCount: 0,
-  },
-  {
-    id: "proposition5",
-    title: "Proposition 5",
-    description: "Vote for your favorite proposition",
-    voteCount: 1,
-  },
-  {
-    id: "proposition6",
-    title: "Proposition 6",
-    description: "Vote for your favorite proposition",
-    voteCount: 2,
-  }
-];
-
 export const VoteForm = () => {
   const { t } = useTranslation();
 
-  const { proposals, createProposal } = useProposal();
+  const account = useAccount();
+  const { writeContract } = useWriteContract();
+  const { data: voter, refetch: refetchVoter } = useVoter();
+  const { data: proposals, refetch: refetchProposals } = useProposal();
 
-  const [selectedOption, setSelectedOption] = useState<number | null>(null);
-  const [submitted, setSubmitted] = useState(false);
-  const [votedOption, setVotedOption] = useState<string | null>(null);
-  // const [propositions, setPropositions] = useState<Vote[]>(fallbackProposals);
+  const [selectedVoteId, setSelectedVoteId] = useState<number | null>(null);
 
+  const handleVote = () => {
+    if (voter?.hasVoted)
+      return;
 
-  // const handleVote = () => {
-  //   if (selectedOption) {
-  //     setPropositions(prevPropositions =>
-  //       prevPropositions.map((proposition) =>
-  //         proposition.id === selectedOption
-  //           ? { ...proposition, voteCount: proposition.voteCount + 1 }
-  //           : proposition
-  //       )
-  //     );
-  //     setVotedOption(selectedOption); // on "fixe" l'option votée
-  //     setSubmitted(true);
-  //   }
-  // };
+    writeContract({
+      address: contractAddress,
+      abi: contractABI.abi,
+      functionName: "vote",
+      chain: hardhat,
+      chainId: 31337,
+      account: account.address,
+      args: [selectedVoteId],
+    }, {
+      onSuccess: () => {
+        refetchVoter();
+        refetchProposals();
+      }
+    });
+
+    setSelectedVoteId(null);
+  };
 
   return (
     <div className="container mx-auto p-6 text-center relative">
-      <Proposaldialog createProposal={createProposal}/>
-      {submitted && votedOption && (
+      <Proposaldialog refetchProposals={refetchProposals} />
+      {voter?.hasVoted && (
         <div className="bg-green-100 text-green-700 dark:bg-green-700 dark:text-green-100 p-4 rounded-md mb-6">
-          {t("vote.thankYou")} {t("vote.for")} {proposals[0]?.title}
+          {t("vote.thankYou")} {t("vote.for")} {proposals[voter?.votedProposalId]?.title}
         </div>
       )}
       <h1 className="text-4xl font-extrabold mb-5 text-primary">
@@ -93,9 +65,9 @@ export const VoteForm = () => {
       <p className="text-secondary-foreground mb-10">
         {t("vote.pageSubtitle")}
       </p>
-      {selectedOption && !submitted && (
+      { !voter?.hasVoted && selectedVoteId != null && (
         <div className="text-center bg-transname parent p-4 bottom-20">
-          <Button onClick={null} className="dark:hover:bg-accent hover:bg-accent">
+          <Button onClick={handleVote} className="dark:hover:bg-accent hover:bg-accent">
             {t("vote.submit")}
           </Button>
         </div>
@@ -106,9 +78,16 @@ export const VoteForm = () => {
           <Card
             key={index}
             className={`p-6 shadow-xl rounded-2xl bg-white dark:bg-gray-800 cursor-pointer transition hover:bg-gray-100 ${
-              selectedOption === index ? "border-primary bg-blue-50" : "border-gray-300"
+              voter?.votedProposalId === index || selectedVoteId === index ? "border-primary bg-blue-50" : "border-gray-300"
             }`}
-            onClick={() => setSelectedOption(index)}
+            onClick={() => {
+              console.log("lol");
+              console.log(selectedVoteId);
+              console.log(voter?.hasVoted);
+              console.log(voter?.votedProposalId);
+              console.log(index);
+              !voter?.hasVoted ? setSelectedVoteId(index) : undefined
+            }}
           >
             <CardContent>
               <h2 className="text-xl text-primary dark:text-primary-foreground font-bold mb-2">{proposition.title}</h2>

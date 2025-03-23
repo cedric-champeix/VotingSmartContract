@@ -34,6 +34,8 @@ export function ProposalTable() {
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = useState({});
 
+  console.log(proposals);
+
   const columns: ColumnDef<Proposal>[] = [
     {
       id: 'title',
@@ -78,7 +80,7 @@ export function ProposalTable() {
         <div className='flex gap-4 items-center'>
           <Input
             placeholder={t('table.votes.searchProposal')}
-            value={(table.getColumn('description')?.getFilterValue() as string) ?? ''}
+            value={(table.getColumn('title')?.getFilterValue() as string) ?? ''}
             onChange={(event) => table.getColumn('description')?.setFilterValue(event.target.value)}
             className='max-w-sm'
           />

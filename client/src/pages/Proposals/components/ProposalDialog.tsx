@@ -9,15 +9,16 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { newProposalSchema } from "@/lib/zod";
 import { Input } from "@/components/ui/input";
-import { ProposalFragment } from "@/hooks/useProposal";
+import { useAccount, useWriteContract } from "wagmi";
+import { contractABI, contractAddress } from "@/constants";
+import { hardhat } from "wagmi/chains";
 
-export type ProposalProps = {
-  createProposal: (proposal: ProposalFragment) => void;
-};
-
-export default function ProposalDialog({createProposal}: ProposalProps) {
+export default function ProposalDialog({refetchProposals}) {
   const { t } = useTranslation();
 
+  const account = useAccount();
+  const { writeContract } = useWriteContract();
+  
   const [open, setOpen] = useState(false);
 
   const form = useForm<z.infer<typeof newProposalSchema>>({
@@ -28,10 +29,24 @@ export default function ProposalDialog({createProposal}: ProposalProps) {
     },
   });
 
-  const proposalSubmit = (data: z.infer<typeof newProposalSchema>) => {
-    createProposal({title: data.title ?? "", description: data.description ?? ""});
-    setOpen(false);
-  };
+  const createProposal = (data: z.infer<typeof newProposalSchema>) => {
+      writeContract({
+        address: contractAddress,
+        abi: contractABI.abi,
+        functionName: "addProposal",
+        scopeKey: "proposals",
+        chain: hardhat,
+        chainId: 31337,
+        account: account.address,
+        args: [data.title, data.description],
+      }, {
+        onSuccess: () => {
+          refetchProposals();
+        }
+      });
+  
+      setOpen(false);
+    }
 
   return (
     <>
@@ -44,7 +59,7 @@ export default function ProposalDialog({createProposal}: ProposalProps) {
             <DialogTitle>{t("proposal.dialog.title")}</DialogTitle>
           </DialogHeader>
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(proposalSubmit)} className='space-y-8'>
+            <form onSubmit={form.handleSubmit(createProposal)} className='space-y-8'>
               <FormField
                 control={form.control}
                 name='title'
