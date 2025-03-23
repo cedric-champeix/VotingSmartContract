@@ -1,13 +1,18 @@
+import { HardhatUserConfig, task } from "hardhat/config";
+import "@nomicfoundation/hardhat-toolbox";
+import "@nomicfoundation/hardhat-ignition";
+import "hardhat-gas-reporter";
+import "solidity-coverage"
+import "@nomicfoundation/hardhat-verify";
+
 import { config as dotenvConfig } from 'dotenv';
 dotenvConfig();
-import '@nomicfoundation/hardhat-toolbox';
-import "@nomicfoundation/hardhat-verify";
 
 const SEPOLIA_RPC_URL = process.env.SEPOLIA_RPC_URL || '';
 const PRIVATE_KEY = process.env.PRIVATE_KEY || '';
 const ETHERSCAN_API_KEY = process.env.ETHERSCAN_API_KEY || '';
 
-const config = {
+const config: HardhatUserConfig = {
   defaultNetwork: 'hardhat',
   networks: {
     sepolia: {
@@ -17,6 +22,7 @@ const config = {
     },
     localhost: {
       url: 'http://127.0.0.1:8545',
+      accounts: PRIVATE_KEY.length > 0 ? [PRIVATE_KEY] : [],
       chainId: 31337,
     },
   },

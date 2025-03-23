@@ -3,6 +3,8 @@ pragma solidity ^0.8.10;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
 
+import "hardhat/console.sol";
+
 /**
  * @title Voting
  * @dev A decentralized voting system that allows voters to register, submit proposals, and vote on them.
@@ -67,7 +69,10 @@ contract Voting is Ownable {
     Vote public currentVote; ///< The current vote details.
 
     constructor() Ownable(msg.sender) {
+        console.log("Owner: %s", msg.sender);
+
         currentVote = Vote(0, 20, 0, false);
+        voters[msg.sender].isRegistered = true;
     }
 
     // ===================== EVENTS =====================
@@ -142,7 +147,7 @@ contract Voting is Ownable {
     function startVoterRegistration() external onlyOwner {
         require(
             workflowStatus == WorkflowStatus.VotesTallied,
-            "Voter registration not open"
+            "The previous vote has not been tallied yet"
         );
 
         workflowStatus = WorkflowStatus.VotersRegisteration;

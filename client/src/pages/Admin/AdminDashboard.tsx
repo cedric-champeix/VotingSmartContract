@@ -1,18 +1,21 @@
 import { Button } from "@/components/ui/button";
 import { contractABI, contractAddress } from "@/constants";
-import { useWorkflowStatusQuery, getNextWorkflow } from "@/queries/workflowQuery";
+import useIsOwner from "@/hooks/useIsOwner";
+import { useWorkflowStatus, getNextWorkflow } from "@/hooks/useWorkflowStatus";
 import { hardhat } from "viem/chains";
 import { useAccount, useWriteContract } from "wagmi";
 
 export default function AdminDashboard() {
-  // const { workflowStatus, getNextWorkflow, startNextWorkflow } = useWorkflowStatus();
-
   const account = useAccount();
-  const { data: workflowStatus } = useWorkflowStatusQuery();
+  const { data: workflowStatus } = useWorkflowStatus();
   const { writeContract } = useWriteContract();
+  const { data: isOwner } = useIsOwner();
   
 
   const handleNextWorkflow = () => {
+    console.log("Account to write:", account);
+    console.log("Next workflow:", getNextWorkflow(workflowStatus));
+
     writeContract({
       address: contractAddress,
       abi: contractABI.abi,
@@ -23,12 +26,14 @@ export default function AdminDashboard() {
     });
   }
 
-
   return (
     <div>
       <h1 className='text-4xl'>Admin Dashboard</h1>
       <div>
-        <h2>Workflow Status: { workflowStatus }</h2>
+        <h2>Is Owner: { isOwner ? 'Yes' : 'No' }</h2>
+      </div>
+      <div>
+        <h2>Workflow Status: { `${workflowStatus}` } </h2>
       </div>
       <Button onClick={handleNextWorkflow}>Next workflow</Button>
     </div>

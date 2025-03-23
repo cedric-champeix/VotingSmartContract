@@ -21,12 +21,13 @@ import { Separator } from '@/components/ui/separator';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useTranslation } from 'react-i18next';
 
-import useProposal, { Proposal } from '@/hooks/useProposal';
+import useProposal from '@/hooks/useProposal';
+import type { Proposal } from '@/hooks/useProposal';
 
 export function ProposalTable() {
   const { t } = useTranslation();
   
-  const {proposals, getProposals} = useProposal();
+  const {data: proposals, refetch: refetchProposals} = useProposal();
 
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -81,7 +82,7 @@ export function ProposalTable() {
             onChange={(event) => table.getColumn('description')?.setFilterValue(event.target.value)}
             className='max-w-sm'
           />
-          <Button variant='outline' onClick={() => getProposals()}>
+          <Button variant='outline' onClick={() => refetchProposals()}>
             <RefreshCw className='w-4 h-4' />
           </Button>
         </div>

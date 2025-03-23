@@ -1,10 +1,8 @@
-import { useState, useEffect } from "react";
-import { readContract, writeContract } from "@wagmi/core";
-import { useAccount, useConfig } from 'wagmi'
+import { useAccount, useReadContract, UseReadContractReturnType } from 'wagmi';
 
 import { contractABI, contractAddress } from "@/constants/index";
-
-enum WorkflowStatus {
+ 
+export enum WorkflowStatus {
   VotersRegisteration,
   ProposalsRegistrationStart,
   ProposalsRegistrationEnd,
@@ -13,65 +11,34 @@ enum WorkflowStatus {
   VotesTallied
 }
 
-export default function useWorkflowStatus() {
+export const useWorkflowStatus = (): Omit<UseReadContractReturnType, 'data'> & { data: WorkflowStatus | undefined } => {
   const account = useAccount();
-  const [workflowStatus, setWorkflowStatus] = useState<WorkflowStatus>();
 
-  const config = useConfig();
+  const res = useReadContract({
+    address: contractAddress,
+    abi: contractABI.abi,
+    functionName: 'getWorkflowStatus',
+    scopeKey: 'workflowStatus',
+    account: account?.address,
+  });
 
-  useEffect(() => {
-    getWorkflowStatus();
-  }, [account]);
+  console.log('Workflow status:', res.data);
+  return { ...res, data: (res.data as WorkflowStatus) ?? undefined };
+};
 
-  const getWorkflowStatus = async () => {
-    if (!account) return;
-
-    const value = await readContract(config, {
-      abi: contractABI.abi,
-      address: contractAddress,
-      functionName: 'getWorkflowStatus',
-      chainId: 31337
-    });
-
-    console.log('Contract value:', value);
-    setWorkflowStatus(value as WorkflowStatus);
+export const getNextWorkflow = (currentWorkflow: WorkflowStatus) => {
+  switch (currentWorkflow) {
+    case WorkflowStatus.VotersRegisteration:
+      return 'startProposalsRegistering';
+    case WorkflowStatus.ProposalsRegistrationStart:
+      return 'endProposalsRegistering';
+    case WorkflowStatus.ProposalsRegistrationEnd:
+      return 'startVotingSession';
+    case WorkflowStatus.VotingSessionStart:
+      return 'endVotingSession';
+    case WorkflowStatus.VotingSessionEnd:
+      return 'tallyVotes';
+    default:
+      return 'startVoterRegistration';
   }
-
-  const startNextWorkflow = async () => {
-    try {
-      if (!account) return;
-
-      const { hash } = await writeContract(config, {
-        abi: contractABI.abi,
-        address: contractAddress,
-        functionName: getNextWorkflow(),
-        args: [],
-        account: account.address
-      });
-      
-      // getWorkflowStatus();
-    } catch (error) {
-      console.error('Error starting proposals registration:', error);
-    }
-  }
-
-  const getNextWorkflow = () => {
-    switch (workflowStatus) {
-      case WorkflowStatus.VotersRegisteration:
-        return 'startProposalsRegistering';
-      case WorkflowStatus.ProposalsRegistrationStart:
-        return 'endProposalsRegistering';
-      case WorkflowStatus.ProposalsRegistrationEnd:
-        return 'startVotingSession';
-      case WorkflowStatus.VotingSessionStart:
-        return 'endVotingSession';
-      case WorkflowStatus.VotingSessionEnd:
-        return 'tallyVotes';
-      default:
-        return 'startVoterRegistration';
-    }
-  }
-
-  return { workflowStatus, getWorkflowStatus, getNextWorkflow, startNextWorkflow };
 }
-  
