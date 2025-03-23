@@ -6,6 +6,7 @@ import {
   ColumnFiltersState,
   SortingState,
   VisibilityState,
+  createColumnHelper,
   flexRender,
   getCoreRowModel,
   getFilteredRowModel,
@@ -34,24 +35,21 @@ export function ProposalTable() {
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = useState({});
 
-  console.log(proposals);
+  const columnHelper = createColumnHelper<Proposal>();
 
   const columns: ColumnDef<Proposal>[] = [
-    {
-      id: 'title',
+    columnHelper.accessor("title", {
       header: t('table.votes.collumn.title'),
-      cell: (cell) => <div>{cell.getValue() as string}</div>,
-    },
-    {
-      id: 'description',
+      cell: (cell) => <div>{cell.getValue()}</div>,
+    }),
+    columnHelper.accessor("description", {
       header: t('table.votes.collumn.desc'),
-      cell: (cell) => <div>{cell.getValue() as string}</div>,
-    },
-    {
-      id: 'voteCount',
+      cell: (cell) => <div>{cell.getValue()}</div>,
+    }),
+    columnHelper.accessor("voteCount", {
       header: t('table.votes.collumn.voteCount'),
-      cell: (cell) => <div>{cell.getValue() as number}</div>,
-    },
+      cell: (cell) => <div>{`${cell.getValue()}`}</div>,
+    }),
   ];
 
   const table = useReactTable({

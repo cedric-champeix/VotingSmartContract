@@ -11,6 +11,7 @@ import useVoter from "@/hooks/useVoter";
 import { useAccount, useWriteContract } from "wagmi";
 import { contractABI, contractAddress } from "@/constants";
 import { hardhat } from "wagmi/chains";
+import { useWorkflowStatus, WorkflowStatus } from "@/hooks/useWorkflowStatus";
 
 export type Vote = {
   id: string;
@@ -26,6 +27,7 @@ export const VoteForm = () => {
   const { writeContract } = useWriteContract();
   const { data: voter, refetch: refetchVoter } = useVoter();
   const { data: proposals, refetch: refetchProposals } = useProposal();
+  const { data: workflowStatus } = useWorkflowStatus();
 
   const [selectedVoteId, setSelectedVoteId] = useState<number | null>(null);
 
@@ -53,7 +55,7 @@ export const VoteForm = () => {
 
   return (
     <div className="container mx-auto p-6 text-center relative">
-      <Proposaldialog refetchProposals={refetchProposals} />
+      {workflowStatus === WorkflowStatus.ProposalsRegistrationStart && (<Proposaldialog refetchProposals={refetchProposals} />)}
       {voter?.hasVoted && (
         <div className="bg-green-100 text-green-700 dark:bg-green-700 dark:text-green-100 p-4 rounded-md mb-6">
           {t("vote.thankYou")} {t("vote.for")} {proposals[voter?.votedProposalId]?.title}
@@ -81,11 +83,6 @@ export const VoteForm = () => {
               voter?.votedProposalId === index || selectedVoteId === index ? "border-primary bg-blue-50" : "border-gray-300"
             }`}
             onClick={() => {
-              console.log("lol");
-              console.log(selectedVoteId);
-              console.log(voter?.hasVoted);
-              console.log(voter?.votedProposalId);
-              console.log(index);
               !voter?.hasVoted ? setSelectedVoteId(index) : undefined
             }}
           >
