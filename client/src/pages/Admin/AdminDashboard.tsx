@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { useAccount, useWriteContract } from 'wagmi';
 import { hardhat } from 'viem/chains';
 import {
+  ArrowLeft,
   ArrowRight,
   CheckCircle2,
   ClipboardList,
@@ -220,14 +221,20 @@ export default function AdminDashboard() {
               </div>
             </CardContent>
             <CardFooter className='flex justify-end'>
-              <Button
-                onClick={handleNextWorkflow}
-                disabled={workflowStatus === WorkflowStatus.VotesTallied || isProcessing}
-                className='flex items-center gap-2'
-              >
-                {isProcessing ? 'Traitement en cours...' : "Passer à l'étape suivante"}
-                {!isProcessing && <ArrowRight className='h-4 w-4' />}
-              </Button>
+              {workflowStatus === WorkflowStatus.VotesTallied ? (
+                <Button
+                  onClick={() => handleNextWorkflow()} // Ajoute un paramètre ou adapte la logique pour réinitialiser
+                  className='flex items-center gap-2 bg-yellow-100 text-yellow-800 hover:bg-yellow-200 dark:bg-yellow-800/30 dark:text-yellow-100 dark:hover:bg-yellow-700/40 transition'
+                >
+                  Revenir à l'étape 1
+                  <ArrowLeft className='h-4 w-4' />
+                </Button>
+              ) : (
+                <Button onClick={handleNextWorkflow} disabled={isProcessing} className='flex items-center gap-2'>
+                  {isProcessing ? 'Traitement en cours...' : "Passer à l'étape suivante"}
+                  {!isProcessing && <ArrowRight className='h-4 w-4' />}
+                </Button>
+              )}
             </CardFooter>
           </Card>
         </TabsContent>
@@ -305,30 +312,10 @@ export default function AdminDashboard() {
           </CardHeader>
           <CardContent className='space-y-4'>
             <div className='grid grid-cols-2 gap-3'>
-              {/* <Button
-                variant='outline'
-                className='h-auto py-4 flex flex-col items-center justify-center'
-                disabled={workflowStatus !== WorkflowStatus.VotersRegisteration}
-              >
-                <Users className='h-5 w-5 mb-1' />
-                <span className='text-xs'>Gérer les électeurs</span>
-              </Button> */}
-              {/* <Button
-                variant='outline'
-                className='h-auto py-4 flex flex-col items-center justify-center'
-                disabled={workflowStatus !== WorkflowStatus.VotesTallied}
-              >
-                <CheckCircle2 className='h-5 w-5 mb-1' />
-                <span className='text-xs'>Voir les résultats</span>
-              </Button> */}
               <Button variant='outline' className='h-auto py-4 flex flex-col items-center justify-center' onClick={() => navigate('/')}>
                 <ClipboardList className='h-5 w-5 mb-1' />
                 <span className='text-xs'>Voir les propositions</span>
               </Button>
-              {/* <Button variant='outline' className='h-auto py-4 flex flex-col items-center justify-center'>
-                <Vote className='h-5 w-5 mb-1' />
-                <span className='text-xs'>Statistiques de vote</span>
-              </Button> */}
             </div>
           </CardContent>
         </Card>
