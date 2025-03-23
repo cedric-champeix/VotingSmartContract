@@ -85,5 +85,13 @@
       "descriptionLabel": "Description",
       "create": "Create"
     }
+  },
+  "voter": {
+    "createVoter": "Add Voter",
+    "dialog": {
+      "title": "Add a new Voter",
+      "addressLabel": "Voter address",
+      "create": "Create"
+    }
   }
 }

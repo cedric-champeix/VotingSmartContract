@@ -4,6 +4,7 @@ import useIsOwner from "@/hooks/useIsOwner";
 import { useWorkflowStatus, getNextWorkflow } from "@/hooks/useWorkflowStatus";
 import { hardhat } from "viem/chains";
 import { useAccount, useWriteContract } from "wagmi";
+import VoterDialog from "./components/VoterDialog";
 
 export default function AdminDashboard() {
   const account = useAccount();
@@ -13,15 +14,13 @@ export default function AdminDashboard() {
   
 
   const handleNextWorkflow = () => {
-    console.log("Account to write:", account);
-    console.log("Next workflow:", getNextWorkflow(workflowStatus));
-
     writeContract({
       address: contractAddress,
       abi: contractABI.abi,
       functionName: getNextWorkflow(workflowStatus),
       scopeKey: 'workflowStatus',
       chain: hardhat,
+      chainId: 31337,
       account: account.address
     });
   }
@@ -36,6 +35,7 @@ export default function AdminDashboard() {
         <h2>Workflow Status: { `${workflowStatus}` } </h2>
       </div>
       <Button onClick={handleNextWorkflow}>Next workflow</Button>
+      <VoterDialog />
     </div>
   );
 }

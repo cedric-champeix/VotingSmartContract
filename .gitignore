@@ -22,7 +22,7 @@ sketch
 
 server/coverage.json
 artifacts/
-ignition/deployments/
+deployments/
 cache/
 typechain-types/
 

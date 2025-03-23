@@ -17,7 +17,7 @@ const config = getDefaultConfig({
   projectId: "275f621740bfee01ee9f2bf973dc15fb",
   chains: [hardhat],
   transports: {
-    [hardhat.id]: http("http://localhost:8545"),
+    [hardhat.id]: http(),
   },
   ssr: true,
   storage: createStorage({

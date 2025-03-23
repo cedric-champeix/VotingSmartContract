@@ -22,7 +22,6 @@ export const useWorkflowStatus = (): Omit<UseReadContractReturnType, 'data'> & {
     account: account?.address,
   });
 
-  console.log('Workflow status:', res.data);
   return { ...res, data: (res.data as WorkflowStatus) ?? undefined };
 };
 
