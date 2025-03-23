@@ -1,7 +1,7 @@
 import { useAccount, useReadContract } from 'wagmi';
 import type { UseReadContractReturnType } from 'wagmi';
 
-import { contractABI, contractAddress } from "@/constants/index";
+import { contractABI, contractAddress } from '@/constants/index';
 
 export type Proposal = {
   title: string;
@@ -25,6 +25,5 @@ export default function useProposal(): Omit<UseReadContractReturnType, 'data'> &
     account: account?.address,
   });
 
-  return {...res, data: res.data as Proposal[] ?? []};
+  return { ...res, data: (res.data as Proposal[]) ?? [] };
 }
-  

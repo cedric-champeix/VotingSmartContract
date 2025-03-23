@@ -57,9 +57,9 @@ export const Navbar = () => {
               <Link to='/admin' onClick={() => navigate('/admin')}>
                 {t('navbar.admin')}
               </Link>
-              <Link to='/vote' onClick={() => navigate('/vote')}>
+              {/* <Link to='/vote' onClick={() => navigate('/vote')}>
                 {t('navbar.vote')}
-              </Link>
+              </Link> */}
               <Link to='/about' onClick={() => navigate('/about')}>
                 {t('navbar.about')}
               </Link>
@@ -122,7 +122,7 @@ export const Navbar = () => {
               <House className='w-4 h-4' />
               {t('navbar.home')}
             </Button>
-            <Button
+            {/* <Button
               onClick={() => {
                 navigate('/vote');
                 setIsOpen(false);
@@ -132,7 +132,7 @@ export const Navbar = () => {
             >
               <Vote className='w-4 h-4' />
               {t('navbar.vote')}
-            </Button>
+            </Button> */}
             <Button
               onClick={() => {
                 navigate('/about');

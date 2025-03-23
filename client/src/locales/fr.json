@@ -82,7 +82,7 @@
     "dialog": {
       "title": "Créer une proposition",
       "titleLabel": "Titre",
-      "descriptionLabel": "Déscription",
+      "descriptionLabel": "Description",
       "create": "Créer"
     }
   },

@@ -1,9 +1,9 @@
-import { VoteForm } from "./VoteForm";
+// import { VoteForm } from "./VoteForm";
 
-export const Vote = () => {
-  return (
-    <>
-      <VoteForm />
-    </>
-  );
-};
+// export const Vote = () => {
+//   return (
+//     <>
+//       <VoteForm />
+//     </>
+//   );
+// };

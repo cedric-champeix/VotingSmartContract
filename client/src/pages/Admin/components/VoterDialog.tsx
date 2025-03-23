@@ -1,25 +1,27 @@
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Form, FormField, FormItem, FormLabel, FormControl } from "@/components/ui/form";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useTranslation } from "react-i18next";
-import { hardhat } from "viem/chains";
-import { useAccount, useWriteContract } from "wagmi";
-import { z } from "zod";
-import { newVoterSchema } from "@/lib/zod";
+import { useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Form, FormField, FormItem, FormLabel, FormControl } from '@/components/ui/form';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useTranslation } from 'react-i18next';
+import { hardhat } from 'viem/chains';
+import { useAccount, useWriteContract } from 'wagmi';
+import { z } from 'zod';
+import { newVoterSchema } from '@/lib/zod';
 
-import { contractABI, contractAddress } from "@/constants";
+import { contractABI, contractAddress } from '@/constants';
+import { useWorkflowStatus, WorkflowStatus } from '@/hooks/useWorkflowStatus';
 
 export default function VoterDialog() {
   const { t } = useTranslation();
-  
+
   const account = useAccount();
   const { writeContract } = useWriteContract();
 
   const [open, setOpen] = useState(false);
+  const { data: workflowStatus, refetch: refetchWorkflowStatus } = useWorkflowStatus();
 
   const form = useForm<z.infer<typeof newVoterSchema>>({
     resolver: zodResolver(newVoterSchema),
@@ -32,7 +34,7 @@ export default function VoterDialog() {
     writeContract({
       address: contractAddress,
       abi: contractABI.abi,
-      functionName: "registerVoter",
+      functionName: 'registerVoter',
       chain: hardhat,
       chainId: 31337,
       account: account.address,
@@ -40,17 +42,21 @@ export default function VoterDialog() {
     });
 
     setOpen(false);
-  }
+  };
 
   return (
     <>
-      <Button onClick={() => setOpen(true)} className="dark:hover:bg-accent hover:bg-accent">
-        {t("voter.createVoter")}
+      <Button
+        onClick={() => setOpen(true)}
+        className='dark:hover:bg-accent hover:bg-accent'
+        disabled={workflowStatus !== WorkflowStatus.VotersRegisteration}
+      >
+        {t('voter.createVoter')}
       </Button>
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className='sm:max-w-[625px]'>
           <DialogHeader>
-            <DialogTitle>{t("voter.dialog.title")}</DialogTitle>
+            <DialogTitle>{t('voter.dialog.title')}</DialogTitle>
           </DialogHeader>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(createVoter)} className='space-y-8'>
@@ -59,14 +65,14 @@ export default function VoterDialog() {
                 name='address'
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t("voter.dialog.addressLabel")}</FormLabel>
+                    <FormLabel>{t('voter.dialog.addressLabel')}</FormLabel>
                     <FormControl>
                       <Input placeholder='Your title' {...field} />
                     </FormControl>
                   </FormItem>
                 )}
               />
-              <Button type='submit'>{t("voter.dialog.create")}</Button>
+              <Button type='submit'>{t('voter.dialog.create')}</Button>
             </form>
           </Form>
         </DialogContent>
