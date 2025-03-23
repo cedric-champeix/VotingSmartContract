@@ -65,6 +65,7 @@ contract Voting is Ownable {
 
     WorkflowStatus public workflowStatus = WorkflowStatus.VotersRegisteration; ///< The current status of the voting process.
     Proposal[] public proposals; ///< List of all registered proposals.
+    address[] public votersAddresses;
     mapping(address => Voter) public voters; ///< Mapping of registered voters and their details.
     Vote public currentVote; ///< The current vote details.
 
@@ -73,6 +74,7 @@ contract Voting is Ownable {
 
         currentVote = Vote(0, 20, 0, false);
         voters[msg.sender].isRegistered = true;
+        votersAddresses.push(msg.sender);
     }
 
     // ===================== EVENTS =====================
@@ -137,7 +139,10 @@ contract Voting is Ownable {
             "Voter registration not open"
         );
         require(!voters[_address].isRegistered, "Voter already registered");
+
         voters[_address].isRegistered = true;
+        votersAddresses.push(_address);
+
         emit VoterRegistered(_address);
     }
 
@@ -151,6 +156,11 @@ contract Voting is Ownable {
         );
 
         delete proposals;
+
+        for (uint i = 0; i < votersAddresses.length; i++) {
+            voters[votersAddresses[i]].hasVoted = false;
+            voters[votersAddresses[i]].votedProposalId = 0;
+        }
 
         workflowStatus = WorkflowStatus.VotersRegisteration;
         emit WorkflowStatusChange(

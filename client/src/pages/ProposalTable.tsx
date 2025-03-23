@@ -127,7 +127,7 @@ export function ProposalTable() {
       header: 'Statut',
       cell: ({ row }) => {
         const index = row.index;
-        const isVoted = Number(voter?.votedProposalId) === index;
+        const isVoted = voter?.hasVoted && Number(voter?.votedProposalId) === index;
         const isSelected = selectedVoteId === index;
 
         if (isVoted) {
