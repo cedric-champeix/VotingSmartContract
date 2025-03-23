@@ -66,3 +66,9 @@ Le projet repose sur :
 -[VILLET Téo](https://github.com/teovlt)  
 -[DEMÉ Gabin](https://github.com/Onibagg/Onibagg)  
 -[CHAMPEIX Cédric](https://github.com/cedric-champeix)
+
+## Vidéo démo
+
+**CLIQUEZ SUR L'IMAGE POUR ACCÉDER À LA VIDÉO DE DÉMONSTRATION :**
+
+[![DApp de Vote](/client/public/images/logo-padding.png)](https://youtu.be/dMRIWz_rd_U)
