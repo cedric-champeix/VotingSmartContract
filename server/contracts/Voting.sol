@@ -150,7 +150,7 @@ contract Voting is Ownable {
             "The previous vote has not been tallied yet"
         );
 
-        proposals = new Proposal[](0);
+        delete proposals;
 
         workflowStatus = WorkflowStatus.VotersRegisteration;
         emit WorkflowStatusChange(
