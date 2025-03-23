@@ -9,6 +9,8 @@ import { About } from '@/pages/About';
 import { Vote } from '@/pages/Vote/Vote';
 import { useAccount } from 'wagmi';
 import AdminDashboard from '@/pages/Admin/AdminDashboard';
+import useIsOwner from '@/hooks/useIsOwner';
+import { OwnerRoute } from './ownerRoute';
 
 const RootLayout = () => {
   return (
@@ -22,7 +24,7 @@ const RootLayout = () => {
 
 const LoginRedirect = () => {
   const { isConnected } = useAccount();
-
+  const { data: isOwner } = useIsOwner();
   // If the user is connected, redirect them to the home page
   if (isConnected) {
     return <Navigate to='/' replace />;
@@ -31,7 +33,6 @@ const LoginRedirect = () => {
   // If not connected, show the Login page
   return <LoginPage />;
 };
-
 export const router = createBrowserRouter([
   {
     path: '/',
@@ -42,22 +43,17 @@ export const router = createBrowserRouter([
     ),
     errorElement: <ErrorPage />,
     children: [
-      {
-        path: '/',
-        element: <Home />,
-      },
-      {
-        path: '/about',
-        element: <About />,
-      },
-      {
-        path: '/vote',
-        element: <Vote />,
-      },
+      { path: '/', element: <Home /> },
+      { path: '/about', element: <About /> },
+      { path: '/vote', element: <Vote /> },
       {
         path: '/admin',
-        element: <AdminDashboard />,
-      }
+        element: (
+          <OwnerRoute>
+            <AdminDashboard />
+          </OwnerRoute>
+        ),
+      },
     ],
   },
   {
